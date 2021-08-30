@@ -39,8 +39,10 @@ while [ "$1" != "" ]; do
         case $1 in
         workspace)
         ;;
+        workspace-service)
+        ;;
         *)
-            echo "Bundle type must be workspace, not $1"
+            echo "Bundle type must be workspace or workspace-service, not $1"
             exit 1
         esac
         bundle_type=$1
