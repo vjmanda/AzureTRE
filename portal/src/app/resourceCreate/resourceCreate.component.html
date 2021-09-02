@@ -1,0 +1,54 @@
+<div class="paddingTop">
+    <div mat-dialog-title class="card shadow p-3 mb-5 bg-white rounded">
+        <ngx-spinner></ngx-spinner>
+
+        <div mat-dialog-content>
+            <div class="row" *ngIf="!templateSelected">
+                <div class="card-header shadow-sm h4">
+                    Select {{ resourceType }} Template:
+                </div>
+                <div style="display:flex; flex-direction: row;flex-wrap: wrap">
+                    <mat-card *ngFor="let template of templates$ | async" (click)="selectTemplate(template)">
+                        <mat-card-header>
+                            <mat-card-title> {{template.name}}</mat-card-title>
+                            <mat-card-subtitle>
+                                {{template.description}}
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+            </div>
+            <div class="row" *ngIf="templateSelected && !submitted">
+                <div class="card-header shadow-sm h4">
+                    {{ resourceType }} Details:
+                </div>
+                <jsonforms class="dialog-pane" *ngIf="schema | async as schema" [schema]="schema" [locale]="'en-US'"
+                    [renderers]="renderers" [ajv]="ajv" [data]="data" (dataChange)="jsonFormsDataChanges($event)"
+                    (errors)="jsonFormsError($event)"></jsonforms>
+            </div>
+            <div class="row" *ngIf="submitted">
+                <div class="col-lg-6 text-center">
+                    <div class="alert alert-success" id="successAlert" role="alert" *ngIf="!error">
+                        Your project creation request was submitted, this may take a few minutes. Once it's
+                        completed it will appear in your project list on the home page.
+                    </div>
+                    <div class="alert alert-danger" id="errorAlert" role="alert" *ngIf="error">
+                        Unfortunately, an error occurred while creating the project. More detail can be found in the
+                        error logs, your DRE administrator should know where to find these.
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="templateSelected">
+                <div class="col-lg-6 text-center">
+                    <button mat-raised-button color="warn" id="cancelButton" type="button" *ngIf="!submitted"
+                        mat-dialog-close>Cancel</button>
+                    <button mat-raised-button color="primary" id="submitButton" type="submit" (click)="createResource()"
+                        *ngIf="!submitted" [disabled]="!createButtonEnabled">Create
+                    </button>
+                    <button mat-raised-button color="accent" id="returnButton" type="button" *ngIf="submitted"
+                        mat-dialog-close>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

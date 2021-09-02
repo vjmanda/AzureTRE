@@ -1,0 +1,69 @@
+<div class="paddingTop">
+    <div mat-dialog-title class="card shadow p-3 mb-5 bg-white rounded">
+        <ngx-spinner></ngx-spinner>
+        <div class="card-header shadow-sm h4">
+            Delete Workspace
+        </div>
+        <div mat-dialog-content>
+            <form [formGroup]="workspaceForm" (ngSubmit)="deleteWorkspace()">
+                <div class='row' *ngIf="!submitted">
+                    <div class='col-12 text-danger font-weight-bold ms-fontSize-14'>Warning, this will delete the
+                        workspace including all its infrastucture and all the data contained within. This process is
+                        irreversible.
+                    </div>
+                    <div class='col-12 text-danger font-weight-bold ms-fontSize-14'>Please enter the name of the workspace
+                        '{{ this.workspaceName }}'
+                        to confirm.
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-12'>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group">
+                                    <input type="text" formControlName="workspaceNameControl" name="workspaceNameControl"
+                                        class="form-control"
+                                        [class.is-invalid]="form.workspaceNameControl.invalid && form.workspaceNameControl.dirty && form.workspaceNameControl.touched"
+                                        [readonly]="submitted" placeholder="Enter Workspace Name">
+                                </div>
+                                <div *ngIf="form.workspaceNameControl.errors">
+                                    <small class="text-danger"
+                                        *ngIf="form.workspaceNameControl.errors.required && form.workspaceNameControl.dirty && form.workspaceNameControl.touched">
+                                        To confirm you wish to delete the workspace, please enter its name.
+                                    </small>
+                                    <small class="text-danger"
+                                        *ngIf="form.workspaceNameControl.invalid && form.workspaceNameControl.dirty && form.workspaceNameControl.touched">
+                                        Please ensure your workspace name matches exactly.
+                                    </small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="submitted">
+                    <div class="col-lg-6 text-center">
+                        <div class="alert alert-success" id="successAlert" role="alert" *ngIf="!error">
+                            Your workspace delete request was submitted. This may take a few minutes to disappear from
+                            your workspace list on the home page.
+                        </div>
+                        <div class="alert alert-danger" id="errorAlert" role="alert" *ngIf="error">
+                            Unfortunately, an error occurred while deleting the workspace. More detail can be found in the
+                            error logs, your DRE administrator should know where to find these.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 text-center">
+                        <button class="btn btn-danger" mat-button mat-dialog-close id="cancelButton" type="button"
+                            *ngIf="!submitted">Cancel</button>
+                        <button class="btn btn-success" mat-button id="submitButton" type="submit"
+                            [disabled]="!workspaceForm.valid" *ngIf="!submitted">Delete Workspace</button>
+                        <button class="btn btn-primary" mat-button mat-dialog-close id="returnButton" type="button"
+                            *ngIf="submitted">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

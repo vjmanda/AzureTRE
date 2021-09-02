@@ -1,0 +1,24 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <span>{{workspace.resourceTemplateParameters.display_name}}</span>
+        <span class="example-spacer"></span>
+
+    </mat-toolbar-row>
+</mat-toolbar>
+<app-workspace-service [workspaceService]="workspaceService" *ngFor="let workspaceService of workspaceServices;">
+</app-workspace-service>
+<div style="width: 100%;">
+    <mat-slide-toggle [(ngModel)]="adminMode" color="primary">
+        admin mode
+    </mat-slide-toggle><span class="example-spacer"></span>
+    <span style="float: right;">
+        <button *ngIf="adminMode" mat-raised-button color="primary">
+            <mat-icon>edit</mat-icon>
+            Edit Workspace
+        </button><button *ngIf="adminMode" mat-raised-button color="primary"
+            (click)="openCreateWorkspaceServiceDialog()">
+            <mat-icon>add</mat-icon>
+            New Service
+        </button>
+    </span>
+</div>

@@ -1,0 +1,8 @@
+{
+    "/api": {
+        "target": "https://mrdemo30.westeurope.cloudapp.azure.com",
+        "secure": true,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+}

@@ -1,0 +1,27 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <span>Select Workspace</span>
+        <span class="example-spacer"></span>
+        <span>
+            <button mat-raised-button color="primary" (click)="openCreateWorkspaceDialog()">
+                <mat-icon>add</mat-icon>
+                New Workspace
+            </button></span>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div style="display:flex; flex-direction: row;flex-wrap: wrap">
+    <mat-card *ngFor="let workspace of workspaces;" (click)="selectWorkspace(workspace)">
+        <mat-card-header>
+            <mat-card-title> {{workspace.resourceTemplateParameters.display_name}}</mat-card-title>
+            <mat-card-subtitle>
+                {{workspace.resourceTemplateParameters.description}}<br /><br />{{workspace.resourceTemplateParameters.workspace_id}}
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-chip-list>
+                <mat-chip class="{{workspace.deployment.status}}" matTooltip="{{workspace.deployment.message}}"
+                    matTooltipPosition="below" matTooltipHideDelay="5000">{{workspace.deployment.status}}</mat-chip>
+            </mat-chip-list>
+        </mat-card-content>
+    </mat-card>
+</div>

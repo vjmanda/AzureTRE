@@ -1,0 +1,30 @@
+button {
+    margin-top: 2em;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.alert {
+    margin-top: 2em;
+    margin-bottom: 0em;
+}
+
+.text-danger {
+    transition-duration: 1s;
+}
+
+.worksapce-template-select {
+    min-width: 30rem;
+}
+
+.mat-card {
+    width: 20rem;
+    margin: 5px;
+    background-color: rgba(0, 0, 200, 0.1);
+}
+.mat-card-actions {
+    margin-left: 10px;
+}
+.mat-card-content {
+    margin-left: 10px;
+}

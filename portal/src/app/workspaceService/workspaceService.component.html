@@ -1,0 +1,57 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <span>
+            {{ workspaceService.resourceTemplateParameters.display_name }}
+        </span>
+        <span class="example-spacer"></span>
+        <button *ngIf="hasUserResourceTemplates" mat-raised-button color="primary"
+            (click)="$event.stopPropagation();openCreateUserResourceDialog()">
+            <mat-icon>add</mat-icon>
+            New
+        </button>
+        <button *ngIf="adminMode" mat-raised-button color="primary">
+            <mat-icon>edit</mat-icon>
+            Edit Service
+        </button>
+    </mat-expansion-panel-header>
+    <span>
+        {{ workspaceService.resourceTemplateParameters.description }}
+    </span>
+    <!-- add if are user resources-->
+    <div style="display:flex; flex-direction: row;">
+        <!-- for each user resource -->
+        <mat-card *ngFor="let userResource of userResources;">
+            <mat-card-header>
+                <mat-card-title>VM1</mat-card-title>
+                <mat-card-subtitle>Large Windows DSVM</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-chip-list>
+                    <mat-chip>Running</mat-chip>
+                </mat-chip-list>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary">Connect</button>
+                <button mat-raised-button color="primary">Stop</button>
+                <button mat-raised-button color="warn">Delete</button>
+            </mat-card-actions>
+        </mat-card>
+        <mat-card *ngIf="workspaceService.resourceTemplateName==='tre-service-guacamole'">
+            <mat-card-header>
+                <mat-card-title>Linux VM</mat-card-title>
+                <mat-card-subtitle>Large Linux DSVM</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-chip-list>
+                    <mat-chip>Stopped</mat-chip>
+                </mat-chip-list>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary">Connect</button>
+                <button mat-raised-button color="primary">Start</button>
+                <button mat-raised-button color="warn">Delete</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</mat-expansion-panel>

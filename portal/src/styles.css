@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/office-ui-fabric-core/dist/css/fabric.min.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~material-design-icons/iconfont/material-icons.css';
+
+body {
+    font-family: 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+    margin: 0px;
+}
+
+
+.dialog-pane {
+    width: 100%;
+    margin-top: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+html, body { height: 100%; min-width: 1000px; }
+body { font-family: Roboto, "Helvetica Neue", sans-serif; }

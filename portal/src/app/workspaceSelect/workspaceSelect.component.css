@@ -1,0 +1,55 @@
+.card-padding-bottom {
+    padding-bottom: 10px;
+}
+/* .row > div {
+    margin: 10px;
+} */
+
+.mat-toolbar {
+    
+    width: 100%;
+
+}
+.workspace-menu {
+    float: right;
+    text-align: right;
+    font-size: medium;
+}
+.workspace-select {
+    width: 20rem;
+    margin-top: 10px;
+    font-size: small;
+}
+button {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+.mat-expansion-panel {
+    margin: 5px;
+}
+.mat-expansion-panel-header {
+    font-size: large;
+}
+.mat-card {
+    width: 20rem;
+    margin: 5px;
+    background-color: rgba(0, 0, 200, 0.1);
+}
+.mat-card-actions {
+    margin-left: 10px;
+}
+.mat-card-content {
+    margin-left: 10px;
+}
+.mat-chip{
+    background-color: rgba(0, 0, 200, 1);
+    color: white;
+}
+.mat-chip.failed{
+    background-color: rgba(200, 0, 0, 1);
+    color: white;
+}

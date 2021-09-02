@@ -1,0 +1,92 @@
+.card-padding-bottom {
+    padding-bottom: 10px;
+}
+/* .row > div {
+    margin: 10px;
+} */
+
+.mat-toolbar {
+    
+    width: 100%;
+
+}
+.workspace-menu {
+    float: right;
+    text-align: right;
+    font-size: medium;
+}
+.workspace-select {
+    width: 20rem;
+    margin-top: 10px;
+    font-size: small;
+}
+button {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+.mat-expansion-panel {
+    margin: 5px;
+}
+.mat-expansion-panel-header {
+    font-size: large;
+}
+.mat-card {
+    width: 20rem;
+    margin: 5px;
+    background-color: rgba(0, 0, 200, 0.1);
+}
+.mat-card-actions {
+    margin-left: 10px;
+}
+.mat-card-content {
+    margin-left: 10px;
+}
+.mat-chip{
+    background-color: rgba(0, 0, 200, 1);
+    color: white;
+}
+/* 
+.mat-card {
+    background-color: #d83b01;
+    width: 15rem;
+    margin: 1rem;
+    padding-top: 0rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
+.mat-card-header {
+    color: white;
+    background-color: rgb(0,0,0,0.3);
+    text-align: left;
+    width: 100%;
+    padding-top: 0.5rem;
+    min-height:5.5rem;
+}
+.mat-card-title {
+    color: #fff;
+    font-size: 1rem;
+    margin: 0rem;
+}
+.mat-card-subtitle {
+    color: #fff;
+}
+.mat-card-content {
+    min-height: 6rem;
+}
+.mat-card-actions {
+    color: #fff;
+    text-align: center;
+}
+
+.mat-card-actions button {
+    color: #fff;
+    vertical-align: middle;
+    height: 2rem;
+    background-color: rgb(0,0,0,0.3);
+    margin-right: 1px;
+    margin-left: 1px;
+} */

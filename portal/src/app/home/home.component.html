@@ -1,0 +1,11 @@
+<mat-toolbar color="primary">
+    <span>Trusted Research Environment</span>
+    <span class="example-spacer"></span>
+    <span *ngIf="currentWorkspace">
+        <button mat-raised-button color="accent" (click)="showSelectWorkspace()">
+            Change Workspace
+        </button></span>
+</mat-toolbar>
+<app-workspace-select (workspaceSelected)="onWorkspaceSelected($event)" *ngIf="!currentWorkspace">
+</app-workspace-select>
+<app-workspace [workspace]="currentWorkspace" *ngIf="currentWorkspace"></app-workspace>

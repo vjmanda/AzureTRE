@@ -1,0 +1,49 @@
+{
+    "id": "6e42d07a-7255-46cb-969c-3fddb5556aa2",
+    "name": "tre-service-guacamole-win10vm",
+    "description": "Guacamole Win10VM template custom parameters",
+    "version": "0.1.0",
+    "resourceType": "user-resource",
+    "current": true,
+    "type": "object",
+    "required": [
+        "display_name",
+        "description",
+        "vm_size"
+    ],
+    "properties": {
+        "display_name": {
+            "type": "string",
+            "title": "Name for the user resource",
+            "description": "The name of the user resource to be displayed to users"
+        },
+        "description": {
+            "type": "string",
+            "title": "Description of the user resource",
+            "description": "Description of the user resource"
+        },
+        "vm_size": {
+            "type": "string",
+            "title": "Virtual Machine Size",
+            "description": "What size virtual machine should be deployed.",
+            "default": "Small",
+            "enum": [
+                "Small",
+                "Medium",
+                "Large"
+            ]
+        }
+    },
+    "system_properties": {
+        "tre_id": {
+            "type": "string"
+        },
+        "workspace_id": {
+            "type": "string"
+        },
+        "azure_location": {
+            "type": "string"
+        }
+    },
+    "parentWorkspaceService": "tre-service-guacamole"
+}

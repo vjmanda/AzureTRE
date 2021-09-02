@@ -47,6 +47,14 @@ COPY ["requirements.txt", "requirements-dev.txt", "/tmp/pip-tmp/" ]
 COPY ["management_api_app/requirements.txt", "/tmp/pip-tmp/management_api_app/" ]
 RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt && rm -rf /tmp/pip-tmp
 
+# Install node
+RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+RUN apt-get install nodejs 
+
+RUN npm config --global set user vscode
+
+RUN npm install -g @angular/cli
+
 RUN usermod -a -G docker vscode
 
 USER vscode
