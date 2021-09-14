@@ -7,6 +7,7 @@ export class UserResource {
     resourceTemplateParameters: {
         display_name: string;
         description: string;
+        connection_uri: string;
     }
     deployment: {
         status: string;

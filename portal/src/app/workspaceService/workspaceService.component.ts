@@ -56,4 +56,8 @@ export class WorkspaceServiceComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  openLink(url: string) {
+    window.open(url, "_blank");
+  }
 }

@@ -181,7 +181,7 @@ export class DREApiCoreService {
   }
 
   getUserResources(workspaceService: WorkspaceService): Observable<UserResource[]> {
-    const reqUri = `${this.configuration.api_uri}/workspace-services/${workspaceService.id}/user-resources`;
+    const reqUri = `${this.configuration.api_uri}/workspaces/${workspaceService.workspaceId}/workspace-services/${workspaceService.id}/user-resources`;
 
     return this.http.get(reqUri)
       .pipe(
