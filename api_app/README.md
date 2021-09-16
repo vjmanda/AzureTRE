@@ -17,7 +17,8 @@ The TRE API is a service that users can interact with to request changes to work
 * [Running API](#running-api)
   * [Develop and run locally](#develop-and-run-locally)
   * [Develop and run in dev container](#develop-and-run-in-dev-container)
-  * [Deploy with docker](#deploy-with-docker)
+  * [Deploy with Docker](#deploy-with-docker)
+* [Unit tests](#unit-tests)
 * [Implementation](#implementation)
   * [Auth in code](#auth-in-code)
 * [Workspace requests](#workspace-requests)
@@ -72,7 +73,6 @@ COSMOS_DB_NAME=<database_name>
 az cosmosdb create -n $COSMOS_NAME -g $RESOURCE_GROUP --locations regionName=$LOCATION
 az cosmosdb sql database create -a $COSMOS_NAME -g $RESOURCE_GROUP -n $COSMOS_DB_NAME
 ```
-
 
 [Create a service principal](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli) and assign it permissions to access Service Bus:
 
@@ -183,14 +183,15 @@ The API endpoints documentation and the Swagger UI will be available at [https:/
     ```cmd
     cd api_app
     pip install -r requirements.txt
+    pip install -r requirements-dev.txt
     uvicorn main:app --reload
     ```
 
 The API endpoints documentation and the Swagger UI will be available at [https://localhost:8000/docs](https://localhost:8000/docs).
 
-### Deploy with docker
+### Deploy with Docker
 
-You must have docker and docker-compose tools installed, and an Azure Cosmos DB configured in `.env` as described above.
+You must have Docker and Docker Compose tools installed, and an Azure Cosmos DB configured in `.env` as described above.
 
 Then run:
 
@@ -200,6 +201,16 @@ docker compose up -d app
 ```
 
 The API will be available at [https://localhost:8000/api](https://localhost:8000/api) in your browser.
+
+## Unit tests
+
+The unit tests are written with pytest and located in folder `/api_app/tests_ma/`.
+
+Run all unit tests with the following command in the root folder of the repository:
+
+```cmd
+pytest --ignore=e2e_tests
+```
 
 ## Implementation
 
@@ -267,3 +278,15 @@ Some workspace routes require `authConfig` field in the request body. The AAD sp
 ```
 
 > **Note:** The app registration for a workspace is not created by the API. One needs to be present (created manually) before using the API to provision a new workspace.
+
+## Network requirements
+
+To be able to run the TRE API it needs to acccess the following resource outside the Azure TRE VNET via explicit allowed [Service Tags](https://docs.microsoft.com/en-us/azure/virtual-network/service-tags-overview) or URLs.
+
+| Service Tag / Destination | Justification |
+| --- | --- |
+| AzureActiveDirectory | Authenticate with the User Assigned identity to access Azure Cosmos DB and Azure Service Bus. |
+| AzureMonitor | Publish traces and logs to one central place for troubleshooting. |
+| AzureResourceManager | To perform control plane operations, such as create database in State Store. |
+| AzureContainerRegistry | Pull the TRE API container image, as it is located in Azure Container Registry.  |
+| graph.microsoft.com | Lookup role assignments for Azure Active Directory user, to only show TRE resources and user has access to. |

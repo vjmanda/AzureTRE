@@ -1,5 +1,5 @@
 name: tre-workspace-base
-version: 0.1.0
+version: 0.1.1
 description: "A base Azure TRE workspace"
 registry: azuretre
 
@@ -28,7 +28,6 @@ parameters:
   - name: address_space
     type: string
     description: "VNet address space for the workspace services"
-    default: "10.2.1.0/24"
   - name: tfstate_resource_group_name
     type: string
     description: "Resource group containing the Terraform state storage account"
