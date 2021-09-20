@@ -45,7 +45,6 @@ export class UserResourceCreateComponent extends resourceCreateComponent {
 
 
         console.log("Schema:" + JSON.stringify(this.schema));
-        console.log("UI Schema:" + this.uischema);
         this.templateSelected = true;
     }
 

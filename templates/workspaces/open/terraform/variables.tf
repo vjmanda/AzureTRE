@@ -1,0 +1,9 @@
+variable "workspace_id" {}
+variable "tre_id" {}
+variable "address_space" {}
+variable "arm_client_id" {}
+variable "arm_client_secret" {}
+variable "arm_tenant_id" {}
+variable "arm_use_msi" {}
+variable "acr_name" {}
+variable "azure_location" {}

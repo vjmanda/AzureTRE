@@ -20,18 +20,19 @@ export abstract class resourceCreateComponent implements OnInit {
     schemaId: 'auto',
     allErrors: true,
     jsonPointers: true,
-    errorDataPath: 'property'
+    errorDataPath: 'property',
+    useDefaults: true
   });
 
-  uischema = JSON.stringify({
-    "type": "VerticalLayout",
-    "elements": [
-      {
-        "type": "Control",
-        "scope": "#/properties/vm_size"
-      }
-    ]
-  });
+  // uischema = JSON.stringify({
+  //   "type": "VerticalLayout",
+  //   "elements": [
+  //     {
+  //       "type": "Control",
+  //       "scope": "#/properties/vm_size"
+  //     }
+  //   ]
+  // });
 
   schema: Observable<Template>;
 

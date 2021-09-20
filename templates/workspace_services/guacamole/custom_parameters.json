@@ -28,13 +28,8 @@
       "$id": "#/properties/guac_drive_name",
       "type": "string",
       "title": "Mounted drive's name",
+      "default": "transfer",
       "description": "The name of the mounted drive"
-    },
-    "guac_drive_path": {
-      "$id": "#/properties/guac_drive_path",
-      "type": "string",
-      "title": "Drive's path",
-      "description": "The mount path, e.g. (/guac-transfer)"
     },
     "guac_disable_download": {
       "$id": "#/properties/guac_disable_download",
