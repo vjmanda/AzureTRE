@@ -1,7 +1,7 @@
 resource "azurerm_virtual_network" "ws" {
   name                = "vnet-${var.tre_id}-ws-${var.workspace_id}"
   location            = var.location
-  resource_group_name = var.resource_group_name
+  resource_group_name = azurerm_resource_group.ws.name
   address_space       = [var.address_space]
 
   lifecycle { ignore_changes = [tags] }
@@ -11,7 +11,7 @@ resource "azurerm_virtual_network" "ws" {
 resource "azurerm_subnet" "services" {
   name                 = "ServicesSubnet"
   virtual_network_name = azurerm_virtual_network.ws.name
-  resource_group_name  = var.resource_group_name
+  resource_group_name  = azurerm_resource_group.ws.name
   address_prefixes     = [local.services_subnet_address_prefix]
   # notice that private endpoints do not adhere to NSG rules
   enforce_private_link_endpoint_network_policies = true
@@ -21,7 +21,7 @@ resource "azurerm_subnet" "services" {
 resource "azurerm_subnet" "webapps" {
   name                 = "WebAppsSubnet"
   virtual_network_name = azurerm_virtual_network.ws.name
-  resource_group_name  = var.resource_group_name
+  resource_group_name  = azurerm_resource_group.ws.name
   address_prefixes     = [local.webapps_subnet_address_prefix]
   # notice that private endpoints do not adhere to NSG rules
   enforce_private_link_endpoint_network_policies = true
@@ -38,46 +38,46 @@ resource "azurerm_subnet" "webapps" {
 }
 
 data "azurerm_virtual_network" "core" {
-  name                = var.core_vnet
-  resource_group_name = var.core_resource_group_name
+  name                = local.core_vnet
+  resource_group_name = local.core_resource_group_name
 }
 
 resource "azurerm_virtual_network_peering" "ws-core-peer" {
   name                      = "ws-core-peer-${var.tre_id}-ws-${var.workspace_id}"
-  resource_group_name       = var.resource_group_name
+  resource_group_name       = azurerm_resource_group.ws.name
   virtual_network_name      = azurerm_virtual_network.ws.name
   remote_virtual_network_id = data.azurerm_virtual_network.core.id
 }
 
 resource "azurerm_virtual_network_peering" "core-ws-peer" {
   name                      = "core-ws-peer-${var.tre_id}-ws-${var.workspace_id}"
-  resource_group_name       = var.core_resource_group_name
-  virtual_network_name      = var.core_vnet
+  resource_group_name       = local.core_resource_group_name
+  virtual_network_name      = local.core_vnet
   remote_virtual_network_id = azurerm_virtual_network.ws.id
 }
 
 data "azurerm_subnet" "shared" {
-  resource_group_name  = var.core_resource_group_name
-  virtual_network_name = var.core_vnet
+  resource_group_name  = local.core_resource_group_name
+  virtual_network_name = local.core_vnet
   name                 = "SharedSubnet"
 }
 
 data "azurerm_subnet" "bastion" {
-  resource_group_name  = var.core_resource_group_name
-  virtual_network_name = var.core_vnet
+  resource_group_name  = local.core_resource_group_name
+  virtual_network_name = local.core_vnet
   name                 = "AzureBastionSubnet"
 }
 
 data "azurerm_subnet" "resourceprocessor" {
-  resource_group_name  = var.core_resource_group_name
-  virtual_network_name = var.core_vnet
+  resource_group_name  = local.core_resource_group_name
+  virtual_network_name = local.core_vnet
   name                 = "ResourceProcessorSubnet"
 }
 
 resource "azurerm_network_security_group" "ws" {
   location            = var.location
   name                = "nsg-ws"
-  resource_group_name = var.resource_group_name
+  resource_group_name = azurerm_resource_group.ws.name
 
   lifecycle { ignore_changes = [tags] }
 }
@@ -97,7 +97,7 @@ resource "azurerm_network_security_rule" "deny-outbound-override" {
   network_security_group_name = azurerm_network_security_group.ws.name
   priority                    = 4096
   protocol                    = "*"
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = azurerm_resource_group.ws.name
   source_address_prefix       = "*"
   source_port_range           = "*"
 }
@@ -111,7 +111,7 @@ resource "azurerm_network_security_rule" "deny-all-inbound-override" {
   network_security_group_name = azurerm_network_security_group.ws.name
   priority                    = 900
   protocol                    = "*"
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = azurerm_resource_group.ws.name
   source_address_prefix       = "*"
   source_port_range           = "*"
 }
@@ -126,7 +126,7 @@ resource "azurerm_network_security_rule" "allow-inbound-within-services-subnet" 
   network_security_group_name = azurerm_network_security_group.ws.name
   priority                    = 100
   protocol                    = "*"
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = azurerm_resource_group.ws.name
   source_port_range           = "*"
 }
 
@@ -140,7 +140,7 @@ resource "azurerm_network_security_rule" "allow-outbound-within-services-subnet"
   network_security_group_name = azurerm_network_security_group.ws.name
   priority                    = 100
   protocol                    = "*"
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = azurerm_resource_group.ws.name
   source_port_range           = "*"
 }
 
@@ -153,7 +153,7 @@ resource "azurerm_network_security_rule" "allow-outbound-to-shared-services" {
   network_security_group_name = azurerm_network_security_group.ws.name
   priority                    = 110
   protocol                    = "*"
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = azurerm_resource_group.ws.name
   source_address_prefix       = "*"
   source_port_range           = "*"
 }
@@ -168,7 +168,7 @@ resource "azurerm_network_security_rule" "allow-outbound-to-internet" {
   network_security_group_name = azurerm_network_security_group.ws.name
   priority                    = 120
   protocol                    = "Tcp"
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = azurerm_resource_group.ws.name
   source_address_prefix       = "*"
   source_port_range           = "*"
 }
@@ -186,7 +186,7 @@ resource "azurerm_network_security_rule" "allow-inbound-from-bastion" {
   network_security_group_name = azurerm_network_security_group.ws.name
   priority                    = 110
   protocol                    = "Tcp"
-  resource_group_name         = var.resource_group_name
+  resource_group_name         = azurerm_resource_group.ws.name
   source_address_prefixes = [
     data.azurerm_subnet.bastion.address_prefix
   ]
@@ -202,7 +202,7 @@ resource "azurerm_network_security_rule" "allow-inbound-from-resourceprocessor" 
   network_security_group_name  = azurerm_network_security_group.ws.name
   priority                     = 120
   protocol                     = "Tcp"
-  resource_group_name          = var.resource_group_name
+  resource_group_name          = azurerm_resource_group.ws.name
   source_address_prefixes = [
     data.azurerm_subnet.resourceprocessor.address_prefix
   ]
@@ -211,7 +211,7 @@ resource "azurerm_network_security_rule" "allow-inbound-from-resourceprocessor" 
 
 data "azurerm_route_table" "rt" {
   name                = "rt-${var.tre_id}"
-  resource_group_name = var.core_resource_group_name
+  resource_group_name = local.core_resource_group_name
 }
 
 resource "azurerm_subnet_route_table_association" "rt_services_subnet_association" {
@@ -221,17 +221,80 @@ resource "azurerm_subnet_route_table_association" "rt_services_subnet_associatio
 
 data "azurerm_private_dns_zone" "azurewebsites" {
   name                = "privatelink.azurewebsites.net"
-  resource_group_name = var.core_resource_group_name
+  resource_group_name = local.core_resource_group_name
 
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "azurewebsites" {
-  resource_group_name   = var.core_resource_group_name
+  resource_group_name   = local.core_resource_group_name
   virtual_network_id    = azurerm_virtual_network.ws.id
   private_dns_zone_name = data.azurerm_private_dns_zone.azurewebsites.name
 
   name                 = "azurewebsites-link-${azurerm_virtual_network.ws.name}"
   registration_enabled = false
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+data "azurerm_private_dns_zone" "filecore" {
+  name                = "privatelink.file.core.windows.net"
+  resource_group_name = local.core_resource_group_name
+
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "filecorelink" {
+  name                  = "filecorelink-${local.service_resource_name_suffix}"
+  resource_group_name   = local.core_resource_group_name
+  private_dns_zone_name = data.azurerm_private_dns_zone.filecore.name
+  virtual_network_id    = azurerm_virtual_network.ws.id
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+
+data "azurerm_private_dns_zone" "blobcore" {
+  name                = "privatelink.blob.core.windows.net"
+  resource_group_name = local.core_resource_group_name
+
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "blobcorelink" {
+  name                  = "blobcorelink-${local.service_resource_name_suffix}"
+  resource_group_name   = local.core_resource_group_name
+  private_dns_zone_name = data.azurerm_private_dns_zone.blobcore.name
+  virtual_network_id    = azurerm_virtual_network.ws.id
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+data "azurerm_private_dns_zone" "vaultcore" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = local.core_resource_group_name
+
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "vaultcorelink" {
+  name                  = "vaultcorelink-${local.workspace_resource_name_suffix}"
+  resource_group_name   = azurerm_resource_group.ws.name
+  private_dns_zone_name = data.azurerm_private_dns_zone.vaultcore.name
+  virtual_network_id    = azurerm_virtual_network.ws.id
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+
+data "azurerm_private_dns_zone" "azurecr" {
+  name                = "privatelink.azurecr.io"
+  resource_group_name = azurerm_resource_group.ws.name
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "azurecrlink" {
+  name                  = "azurecrlink-${local.service_resource_name_suffix}"
+  resource_group_name   = azurerm_resource_group.ws.name
+  private_dns_zone_name = data.azurerm_private_dns_zone.azurecr.name
+  virtual_network_id    = azurerm_virtual_network.ws.id
 
   lifecycle { ignore_changes = [tags] }
 }

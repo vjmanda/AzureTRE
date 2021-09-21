@@ -32,7 +32,7 @@ Please follow the above links to learn more about how to access the services and
   make porter-publish DIR=./templates/workspace_services/devtestlabs
   ```
 
-1. Create a copy of `workspaces/azureml_devtestlabs/.env.sample` with the name `.env` and update the variables with the appropriate values.
+1. Create a copy of `workspaces/azureml/.env.sample` with the name `.env` and update the variables with the appropriate values.
 
   | Environment variable name | Description |
   | ------------------------- | ----------- |
@@ -42,7 +42,7 @@ Please follow the above links to learn more about how to access the services and
 1. Build and install the workspace:
 
   ```cmd
-  make porter-build DIR=./templates/workspaces/azureml_devtestlabs
-  make porter-publish DIR=./templates/workspaces/azureml_devtestlabs
-  make porter-install DIR=./templates/workspaces/azureml_devtestlabs
+  make porter-build DIR=./templates/workspaces/azureml
+  make porter-publish DIR=./templates/workspaces/azureml
+  make porter-install DIR=./templates/workspaces/azureml
   ```

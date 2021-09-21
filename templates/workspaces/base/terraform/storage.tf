@@ -28,38 +28,6 @@ resource "azurerm_storage_account" "stg" {
   }
 }
 
-resource "azurerm_private_dns_zone" "filecore" {
-  name                = "privatelink.file.core.windows.net"
-  resource_group_name = data.azurerm_resource_group.ws.name
-
-  lifecycle { ignore_changes = [tags] }
-}
-
-resource "azurerm_private_dns_zone" "blobcore" {
-  name                = "privatelink.blob.core.windows.net"
-  resource_group_name = data.azurerm_resource_group.ws.name
-
-  lifecycle { ignore_changes = [tags] }
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "filecorelink" {
-  name                  = "filecorelink-${local.service_resource_name_suffix}"
-  resource_group_name   = data.azurerm_resource_group.ws.name
-  private_dns_zone_name = azurerm_private_dns_zone.filecore.name
-  virtual_network_id    = data.azurerm_virtual_network.ws.id
-
-  lifecycle { ignore_changes = [tags] }
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "blobcorelink" {
-  name                  = "blobcorelink-${local.service_resource_name_suffix}"
-  resource_group_name   = data.azurerm_resource_group.ws.name
-  private_dns_zone_name = azurerm_private_dns_zone.blobcore.name
-  virtual_network_id    = data.azurerm_virtual_network.ws.id
-
-  lifecycle { ignore_changes = [tags] }
-}
-
 resource "azurerm_private_endpoint" "stgfilepe" {
   name                = "stgfilepe-${local.service_resource_name_suffix}"
   location            = data.azurerm_resource_group.ws.location

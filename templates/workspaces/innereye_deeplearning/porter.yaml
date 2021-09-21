@@ -19,9 +19,9 @@ parameters:
   - name: tre_id
     type: string
     description: "The ID of the parent TRE instance e.g., mytre-dev-3142"
-  - name: workspace_id
+  - name: id
     type: string
-    description: "Unique 4-digit workspace ID"
+    description: "ID for this resource"
   - name: azure_location
     env: LOCATION
     type: string

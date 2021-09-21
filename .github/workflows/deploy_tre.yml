@@ -169,13 +169,13 @@ jobs:
             make register-bundle DIR=./templates/workspaces/base
           fi
 
-          # Check if azureml_devtestlabs template is already registered
+          # Check if azureml template is already registered
           # ***********************************************************
           export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-templates/tre-workspace-azureml-devtestlabs" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
 
           if [[ ${STATUS_CODE} == 404 ]]
           then
-            make register-bundle DIR=./templates/workspaces/azureml_devtestlabs
+            make register-bundle DIR=./templates/workspaces/azureml
           fi
 
           # Check if innereye_deeplearning template is already registered
@@ -381,7 +381,7 @@ jobs:
         with:
           files: artifacts/**/*.xml
 
-  # deploy_azureml_devtestlabs_workspace:
+  # deploy_azureml_workspace:
   #   name: Deploy Azure ML and DevTest Labs Workspace
   #   needs: [publish_innereye_bundles]
   #   runs-on: ubuntu-latest
@@ -393,7 +393,7 @@ jobs:
   #     uses: azure/login@v1
   #     with:
   #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #   - name: Publish and deploy azureml_devtestlabs workspace bundle
+  #   - name: Publish and deploy azureml workspace bundle
   #     shell: bash
   #     env:
   #       TRE_ID: ${{ secrets.TRE_ID }}
@@ -414,11 +414,11 @@ jobs:
   #         export ARM_TENANT_ID=$(echo "$AZURE_CREDENTIALS" | jq -r '.tenantId')
   #         curl -L https://cdn.porter.sh/latest/install-linux.sh | bash && ~/.porter/porter mixin install docker
   #         export PATH=~/.porter/:$PATH
-  #         make porter-publish DIR=./templates/workspaces/azureml_devtestlabs
-  #         make porter-install DIR=./templates/workspaces/azureml_devtestlabs
+  #         make porter-publish DIR=./templates/workspaces/azureml
+  #         make porter-install DIR=./templates/workspaces/azureml
   # deploy_innereye_deeplearning_workspace:
   #   name: Deploy InnerEye Deep Learning Workspace
-  #   needs: [deploy_azureml_devtestlabs_workspace]
+  #   needs: [deploy_azureml_workspace]
   #   runs-on: ubuntu-latest
   #   environment: Dev
   #   steps:
@@ -428,7 +428,7 @@ jobs:
   #     uses: azure/login@v1
   #     with:
   #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #   - name: Publish and deploy azureml_devtestlabs workspace bundle
+  #   - name: Publish and deploy azureml workspace bundle
   #     shell: bash
   #     env:
   #       TRE_ID: ${{ secrets.TRE_ID }}

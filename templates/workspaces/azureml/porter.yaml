@@ -1,5 +1,5 @@
-name: tre-workspace-azureml-devtestlabs
-version: 0.1.7
+name: tre-workspace-azureml
+version: 0.1.8
 description: "A Azure TRE workspace with Azure Machine Learning and Dev Test Labs"
 registry: azuretre
 dockerfile: Dockerfile.tmpl
@@ -18,9 +18,9 @@ parameters:
   - name: tre_id
     type: string
     description: "The ID of the parent TRE instance e.g., mytre-dev-3142"
-  - name: workspace_id
+  - name: id
     type: string
-    description: "Unique 4-digit workspace ID"
+    description: "ID for this installation"
   - name: azure_location
     env: LOCATION
     type: string
@@ -29,9 +29,10 @@ parameters:
     type: string
     description: "VNet address space for the workspace services"
     default: "10.2.1.0/24"
-  - name: acr_name
+  - name: mgmt_acr_name
     type: string
-    description: "Name of the azure container registry"
+    env: MGMT_ACR_NAME
+    description: "The devops ACR name"
   - name: tfstate_resource_group_name
     type: string
     description: "Resource group containing the Terraform state storage account"
@@ -53,28 +54,46 @@ mixins:
   - exec
   - docker
   - az
+  - terraform
 
 install:
+  # - az:
+  #     description: "az login"
+  #     arguments:
+  #       - login
+  #     flags:
+  #       identity:
+  #       username: "{{ bundle.credentials.azure_client_id}}"
   - az:
       description: "az login"
       arguments:
         - login
       flags:
-        identity:
+        service-principal:
         username: "{{ bundle.credentials.azure_client_id}}"
+        password: "{{ bundle.credentials.azure_client_secret}}"
+        tenant: "{{ bundle.credentials.azure_tenant_id}}"
   - az:
       description: "acr login"
       arguments:
         - acr
         - login
       flags:
-        name: "{{ bundle.parameters.acr_name }}"
+        name: "{{ bundle.parameters.mgmt_acr_name }}"
   - exec:
       description: "Install Base Workspace service"
       command: ./install_workspace_base.sh
-  - exec:
-      description: "Install DevTestLabs service"
-      command: ./install_service_devtestlabs.sh
+  - terraform:
+      description: "Deploy workspace specific terraform rules"
+      input: false
+      vars:
+        tre_id: "{{ bundle.parameters.tre_id }}"
+        tre_resource_id: "{{ bundle.parameters.id }}"
+      backendConfig:
+        resource_group_name: "{{ bundle.parameters.tfstate_resource_group_name }}"
+        storage_account_name: "{{ bundle.parameters.tfstate_storage_account_name }}"
+        container_name: "{{ bundle.parameters.tfstate_container_name }}"
+        key: "tre-workspace-azureml-{{ bundle.parameters.id }}"
   - exec:
       description: "Install Azure ML service"
       command: ./install_service_azureml.sh

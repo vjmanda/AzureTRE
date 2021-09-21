@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0-DRAFT+TODO",
-  "name": "workspace-azureml_devtestlabs",
+  "name": "workspace-azureml",
   "created": "2021-06-03T11:54:54.0225968Z",
   "modified": "2021-06-03T11:54:54.0225968Z",
   "parameters": [
@@ -23,9 +23,9 @@
       }
     },
     {
-      "name": "workspace_id",
+      "name": "id",
       "source": {
-        "env": "WORKSPACE_ID"
+        "env": "ID"
       }
     },
     {
