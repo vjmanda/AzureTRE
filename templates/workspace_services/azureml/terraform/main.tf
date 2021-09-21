@@ -19,11 +19,11 @@ data "azurerm_client_config" "current" {}
 
 
 data "azurerm_resource_group" "ws" {
-  name = "rg-${var.tre_id}-ws-${var.workspace_id}"
+  name = "rg-${var.tre_id}-ws-${local.short_workspace_id}"
 }
 
 data "azurerm_virtual_network" "ws" {
-  name                = "vnet-${var.tre_id}-ws-${var.workspace_id}"
+  name                = "vnet-${var.tre_id}-ws-${local.short_workspace_id}"
   resource_group_name = data.azurerm_resource_group.ws.name
 }
 
@@ -36,22 +36,22 @@ data "azurerm_subnet" "services" {
 module "kv" {
   source       = "./keyvault"
   tre_id       = var.tre_id
-  workspace_id = var.workspace_id
-  service_id   = local.service_id
+  workspace_id = local.short_workspace_id
+  service_id   = local.short_service_id
 }
 
 module "storage" {
   source       = "./storage"
   tre_id       = var.tre_id
-  workspace_id = var.workspace_id
-  service_id   = local.service_id
+  workspace_id = local.short_workspace_id
+  service_id   = local.short_service_id
 }
 
 module "acr" {
   source       = "./acr"
   tre_id       = var.tre_id
-  workspace_id = var.workspace_id
-  service_id   = local.service_id
+  workspace_id = local.short_workspace_id
+  service_id   = local.short_service_id
 }
 
 resource "azurerm_application_insights" "ai" {
