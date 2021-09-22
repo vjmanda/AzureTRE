@@ -1,5 +1,5 @@
 resource "azurerm_virtual_network" "ws" {
-  name                = "vnet-${var.tre_id}-ws-${var.workspace_id}"
+  name                = "vnet-${local.workspace_resource_name_suffix}"
   location            = var.location
   resource_group_name = azurerm_resource_group.ws.name
   address_space       = [var.address_space]
@@ -43,14 +43,14 @@ data "azurerm_virtual_network" "core" {
 }
 
 resource "azurerm_virtual_network_peering" "ws-core-peer" {
-  name                      = "ws-core-peer-${var.tre_id}-ws-${var.workspace_id}"
+  name                      = "ws-core-peer-${local.workspace_resource_name_suffix}"
   resource_group_name       = azurerm_resource_group.ws.name
   virtual_network_name      = azurerm_virtual_network.ws.name
   remote_virtual_network_id = data.azurerm_virtual_network.core.id
 }
 
 resource "azurerm_virtual_network_peering" "core-ws-peer" {
-  name                      = "core-ws-peer-${var.tre_id}-ws-${var.workspace_id}"
+  name                      = "core-ws-peer-${local.workspace_resource_name_suffix}"
   resource_group_name       = local.core_resource_group_name
   virtual_network_name      = local.core_vnet
   remote_virtual_network_id = azurerm_virtual_network.ws.id
@@ -243,7 +243,7 @@ data "azurerm_private_dns_zone" "filecore" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "filecorelink" {
-  name                  = "filecorelink-${local.service_resource_name_suffix}"
+  name                  = "filecorelink-${local.workspace_resource_name_suffix}"
   resource_group_name   = local.core_resource_group_name
   private_dns_zone_name = data.azurerm_private_dns_zone.filecore.name
   virtual_network_id    = azurerm_virtual_network.ws.id
@@ -259,7 +259,7 @@ data "azurerm_private_dns_zone" "blobcore" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "blobcorelink" {
-  name                  = "blobcorelink-${local.service_resource_name_suffix}"
+  name                  = "blobcorelink-${local.workspace_resource_name_suffix}"
   resource_group_name   = local.core_resource_group_name
   private_dns_zone_name = data.azurerm_private_dns_zone.blobcore.name
   virtual_network_id    = azurerm_virtual_network.ws.id
@@ -270,12 +270,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "blobcorelink" {
 data "azurerm_private_dns_zone" "vaultcore" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = local.core_resource_group_name
-
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "vaultcorelink" {
   name                  = "vaultcorelink-${local.workspace_resource_name_suffix}"
-  resource_group_name   = azurerm_resource_group.ws.name
+  resource_group_name   = local.core_resource_group_name
   private_dns_zone_name = data.azurerm_private_dns_zone.vaultcore.name
   virtual_network_id    = azurerm_virtual_network.ws.id
 
@@ -285,14 +284,12 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vaultcorelink" {
 
 data "azurerm_private_dns_zone" "azurecr" {
   name                = "privatelink.azurecr.io"
-  resource_group_name = azurerm_resource_group.ws.name
-
-  lifecycle { ignore_changes = [tags] }
+  resource_group_name = local.core_resource_group_name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "azurecrlink" {
-  name                  = "azurecrlink-${local.service_resource_name_suffix}"
-  resource_group_name   = azurerm_resource_group.ws.name
+  name                  = "azurecrlink-${local.workspace_resource_name_suffix}"
+  resource_group_name   = local.core_resource_group_name
   private_dns_zone_name = data.azurerm_private_dns_zone.azurecr.name
   virtual_network_id    = azurerm_virtual_network.ws.id
 

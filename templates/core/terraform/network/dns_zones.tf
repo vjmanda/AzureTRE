@@ -107,8 +107,8 @@ resource "azurerm_private_dns_zone" "azurecr" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "azurecrlink" {
-  name                  = "azurecrlink-${local.service_resource_name_suffix}"
+resource "azurerm_private_dns_zone_virtual_network_link" "acrlink" {
+  name                  = "acrcorelink"
   resource_group_name   =  var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.azurecr.name
   virtual_network_id    = azurerm_virtual_network.core.id

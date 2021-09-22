@@ -1,8 +1,5 @@
-
-data "azurerm_client_config" "current" {}
-
 resource "azurerm_key_vault" "kv" {
-  name                     = "kv-${var.tre_id}${var.tre_resource_id}"
+  name                     = local.keyvault_name
   location                 = azurerm_resource_group.ws.location
   resource_group_name      = azurerm_resource_group.ws.name
   sku_name                 = "standard"

@@ -32,6 +32,11 @@ resource "azurerm_key_vault_access_policy" "managed_identity" {
   certificate_permissions = ["Get", "List", ]
 }
 
+data "azurerm_private_dns_zone" "vaultcore" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = var.resource_group_name
+}
+
 resource "azurerm_private_endpoint" "kvpe" {
   name                = "pe-kv-${var.tre_id}"
   location            = var.location
@@ -42,7 +47,7 @@ resource "azurerm_private_endpoint" "kvpe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group"
-    private_dns_zone_ids = [azurerm_private_dns_zone.vaultcore.id]
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.vaultcore.id]
   }
 
   private_service_connection {
