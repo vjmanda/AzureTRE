@@ -54,7 +54,6 @@ mixins:
   - exec
   - docker
   - az
-  - terraform
 
 install:
   # - az:
@@ -83,17 +82,6 @@ install:
   - exec:
       description: "Install Base Workspace service"
       command: ./install_workspace_base.sh
-  - terraform:
-      description: "Deploy workspace specific terraform rules"
-      input: false
-      vars:
-        tre_id: "{{ bundle.parameters.tre_id }}"
-        tre_resource_id: "{{ bundle.parameters.id }}"
-      backendConfig:
-        resource_group_name: "{{ bundle.parameters.tfstate_resource_group_name }}"
-        storage_account_name: "{{ bundle.parameters.tfstate_storage_account_name }}"
-        container_name: "{{ bundle.parameters.tfstate_container_name }}"
-        key: "tre-workspace-azureml-{{ bundle.parameters.id }}"
   - exec:
       description: "Install Azure ML service"
       command: ./install_service_azureml.sh

@@ -33,27 +33,6 @@ data "azurerm_subnet" "services" {
   resource_group_name  = data.azurerm_virtual_network.ws.resource_group_name
 }
 
-module "kv" {
-  source       = "./keyvault"
-  tre_id       = var.tre_id
-  workspace_id = local.short_workspace_id
-  service_id   = local.short_service_id
-}
-
-module "storage" {
-  source       = "./storage"
-  tre_id       = var.tre_id
-  workspace_id = local.short_workspace_id
-  service_id   = local.short_service_id
-}
-
-module "acr" {
-  source       = "./acr"
-  tre_id       = var.tre_id
-  workspace_id = local.short_workspace_id
-  service_id   = local.short_service_id
-}
-
 resource "azurerm_application_insights" "ai" {
   name                = "ai-${local.service_resource_name_suffix}"
   location            = data.azurerm_resource_group.ws.location
@@ -63,14 +42,23 @@ resource "azurerm_application_insights" "ai" {
   lifecycle { ignore_changes = [tags] }
 }
 
+data "azurerm_key_vault" "ws" {
+  name                = local.keyvault_name
+  resource_group_name = data.azurerm_resource_group.ws.name
+}
+
+data "azurerm_storage_account" "ws" {
+  name = local.storage_name
+  resource_group_name = data.azurerm_resource_group.ws.name
+}
+
 resource "azurerm_machine_learning_workspace" "ml" {
   name                    = local.workspace_name
   location                = data.azurerm_resource_group.ws.location
   resource_group_name     = data.azurerm_resource_group.ws.name
   application_insights_id = azurerm_application_insights.ai.id
-  key_vault_id            = module.kv.keyvault_id
-  storage_account_id      = module.storage.storage_account_id
-
+  key_vault_id            = data.azurerm_key_vault.ws.id
+  storage_account_id      = data.azurerm_storage_account.ws.id
   identity {
     type = "SystemAssigned"
   }

@@ -12,9 +12,7 @@ resource "azurerm_container_registry" "acr" {
 
 data "azurerm_private_dns_zone" "azurecr" {
   name                = "privatelink.azurecr.io"
-  resource_group_name = data.azurerm_resource_group.ws.name
-
-  lifecycle { ignore_changes = [tags] }
+  resource_group_name = local.core_resource_group_name
 }
 
 resource "azurerm_private_endpoint" "acrpe" {
