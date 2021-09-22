@@ -1,5 +1,5 @@
 name: tre-service-innereye-deeplearning
-version: 0.1.1
+version: 0.1.2
 description: "An Azure TRE service for InnerEye Deep Learning"
 registry: azuretre
 dockerfile: Dockerfile.tmpl
@@ -22,6 +22,10 @@ parameters:
   - name: id
     type: string
     description: "An Id for this installation"
+  - name: inference_sp_client_id
+    type: string
+  - name: inference_sp_client_secret
+    type: string
   - name: tfstate_resource_group_name
     type: string
     description: "Resource group containing the Terraform state storage account"
@@ -55,6 +59,8 @@ install:
         workspace_id: "{{ bundle.parameters.workspace_id }}"
         tre_id: "{{ bundle.parameters.tre_id }}"
         tre_resource_id: "{{ bundle.parameters.id }}"
+        inference_sp_client_id: "{{ bundle.parameters.inference_sp_client_id }}"
+        inference_sp_client_secret: "{{ bundle.parameters.inference_sp_client_secret }}"
         arm_tenant_id: "{{ bundle.credentials.azure_tenant_id }}"
         arm_client_id: "{{ bundle.credentials.azure_client_id }}"
         arm_client_secret:  "{{ bundle.credentials.azure_client_secret }}"
@@ -81,6 +87,8 @@ uninstall:
         workspace_id: "{{ bundle.parameters.workspace_id }}"
         tre_id: "{{ bundle.parameters.tre_id }}"
         tre_resource_id: "{{ bundle.parameters.id }}"
+        inference_sp_client_id: "{{ bundle.parameters.inference_sp_client_id }}"
+        inference_sp_client_secret: "{{ bundle.parameters.inference_sp_client_secret }}"
         arm_tenant_id: "{{ bundle.credentials.azure_tenant_id }}"
         arm_client_id: "{{ bundle.credentials.azure_client_id }}"
         arm_client_secret:  "{{ bundle.credentials.azure_client_secret }}"

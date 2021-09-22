@@ -35,6 +35,18 @@
       }
     },
     {
+      "name": "inference_sp_client_id",
+      "source": {
+        "env": "INFERENCE_SP_CLIENT_ID"
+      }
+    },
+    {
+      "name": "inference_sp_client_secret",
+      "source": {
+        "env": "INFERENCE_SP_CLIENT_SECRET"
+      }
+    },
+    {
       "name": "tfstate_container_name",
       "source": {
         "env": "TERRAFORM_STATE_CONTAINER_NAME"

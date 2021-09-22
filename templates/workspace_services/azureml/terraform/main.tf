@@ -66,55 +66,21 @@ resource "azurerm_machine_learning_workspace" "ml" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone" "azureml" {
+data "azurerm_private_dns_zone" "azureml" {
   name                = "privatelink.api.azureml.ms"
-  resource_group_name = data.azurerm_resource_group.ws.name
-
-  lifecycle { ignore_changes = [tags] }
+  resource_group_name = local.core_resource_group_name
 }
 
-resource "azurerm_private_dns_zone" "azuremlcert" {
+data "azurerm_private_dns_zone" "azuremlcert" {
   name                = "privatelink.cert.api.azureml.ms"
-  resource_group_name = data.azurerm_resource_group.ws.name
-
-  lifecycle { ignore_changes = [tags] }
+  resource_group_name = local.core_resource_group_name
 }
 
 
-resource "azurerm_private_dns_zone" "notebooks" {
+data "azurerm_private_dns_zone" "notebooks" {
   name                = "privatelink.notebooks.azure.net"
-  resource_group_name = data.azurerm_resource_group.ws.name
-
-  lifecycle { ignore_changes = [tags] }
+  resource_group_name = local.core_resource_group_name
 }
-
-resource "azurerm_private_dns_zone_virtual_network_link" "azuremllink" {
-  name                  = "azuremllink-${local.service_resource_name_suffix}"
-  resource_group_name   = data.azurerm_resource_group.ws.name
-  private_dns_zone_name = azurerm_private_dns_zone.azureml.name
-  virtual_network_id    = data.azurerm_virtual_network.ws.id
-
-  lifecycle { ignore_changes = [tags] }
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "azuremlcertlink" {
-  name                  = "azuremlcertlink-${local.service_resource_name_suffix}"
-  resource_group_name   = data.azurerm_resource_group.ws.name
-  private_dns_zone_name = azurerm_private_dns_zone.azuremlcert.name
-  virtual_network_id    = data.azurerm_virtual_network.ws.id
-
-  lifecycle { ignore_changes = [tags] }
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "notebookslink" {
-  name                  = "notebookslink-${local.service_resource_name_suffix}"
-  resource_group_name   = data.azurerm_resource_group.ws.name
-  private_dns_zone_name = azurerm_private_dns_zone.notebooks.name
-  virtual_network_id    = data.azurerm_virtual_network.ws.id
-
-  lifecycle { ignore_changes = [tags] }
-}
-
 resource "azurerm_private_endpoint" "mlpe" {
   name                = "mlpe-${local.service_resource_name_suffix}"
   location            = data.azurerm_resource_group.ws.location
@@ -125,7 +91,7 @@ resource "azurerm_private_endpoint" "mlpe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group"
-    private_dns_zone_ids = [azurerm_private_dns_zone.azureml.id, azurerm_private_dns_zone.notebooks.id, azurerm_private_dns_zone.azuremlcert.id]
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.azureml.id, data.azurerm_private_dns_zone.notebooks.id, data.azurerm_private_dns_zone.azuremlcert.id]
   }
 
   private_service_connection {

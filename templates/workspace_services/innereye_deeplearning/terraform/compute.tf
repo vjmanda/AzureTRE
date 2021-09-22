@@ -101,9 +101,13 @@ resource "azurerm_resource_group_template_deployment" "deploy_compute_instance" 
   deployment_mode = "Incremental"
 }
 
+data "azurerm_container_registry" "aml" {
+  name                = local.azureml_acr_name
+  resource_group_name = data.azurerm_resource_group.ws.name
+}
 
 resource "azurerm_role_assignment" "compute_cluster_acr_pull" {
-  scope                = var.azureml_acr_id
+  scope                = data.azurerm_container_registry.aml.id
   role_definition_name = "AcrPull"
   principal_id         = jsondecode(azurerm_resource_group_template_deployment.deploy_compute_cluster.output_content).cluster_principal_id.value
 }

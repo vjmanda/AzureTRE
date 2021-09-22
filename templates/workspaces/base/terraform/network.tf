@@ -222,7 +222,6 @@ resource "azurerm_subnet_route_table_association" "rt_services_subnet_associatio
 data "azurerm_private_dns_zone" "azurewebsites" {
   name                = "privatelink.azurewebsites.net"
   resource_group_name = local.core_resource_group_name
-
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "azurewebsites" {
@@ -291,6 +290,49 @@ resource "azurerm_private_dns_zone_virtual_network_link" "azurecrlink" {
   name                  = "azurecrlink-${local.workspace_resource_name_suffix}"
   resource_group_name   = local.core_resource_group_name
   private_dns_zone_name = data.azurerm_private_dns_zone.azurecr.name
+  virtual_network_id    = azurerm_virtual_network.ws.id
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+data "azurerm_private_dns_zone" "azureml" {
+  name                = "privatelink.api.azureml.ms"
+  resource_group_name = local.core_resource_group_name
+}
+
+data "azurerm_private_dns_zone" "azuremlcert" {
+  name                = "privatelink.cert.api.azureml.ms"
+  resource_group_name = local.core_resource_group_name
+}
+
+
+data "azurerm_private_dns_zone" "notebooks" {
+  name                = "privatelink.notebooks.azure.net"
+  resource_group_name = local.core_resource_group_name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "azuremllink" {
+  name                  = "azuremllink-${local.workspace_resource_name_suffix}"
+  resource_group_name   = local.core_resource_group_name
+  private_dns_zone_name = data.azurerm_private_dns_zone.azureml.name
+  virtual_network_id    = azurerm_virtual_network.ws.id
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "azuremlcertlink" {
+  name                  = "azuremlcertlink-${local.workspace_resource_name_suffix}"
+  resource_group_name   = local.core_resource_group_name
+  private_dns_zone_name = data.azurerm_private_dns_zone.azuremlcert.name
+  virtual_network_id    = azurerm_virtual_network.ws.id
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "notebookslink" {
+  name                  = "notebookslink-${local.workspace_resource_name_suffix}"
+  resource_group_name   = local.core_resource_group_name
+  private_dns_zone_name = data.azurerm_private_dns_zone.notebooks.name
   virtual_network_id    = azurerm_virtual_network.ws.id
 
   lifecycle { ignore_changes = [tags] }

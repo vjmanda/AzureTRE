@@ -5,6 +5,12 @@
   "modified": "2021-06-03T11:54:54.0225968Z",
   "parameters": [
     {
+      "name": "id",
+      "source": {
+        "env": "ID"
+      }
+    },
+    {
       "name": "workspace_id",
       "source": {
         "env": "WORKSPACE_ID"
@@ -14,6 +20,18 @@
       "name": "tre_id",
       "source": {
         "env": "TRE_ID"
+      }
+    },
+    {
+      "name": "inference_sp_client_id",
+      "source": {
+        "env": "INFERENCE_SP_CLIENT_ID"
+      }
+    },
+    {
+      "name": "inference_sp_client_secret",
+      "source": {
+        "env": "INFERENCE_SP_CLIENT_SECRET"
       }
     },
     {

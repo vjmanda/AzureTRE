@@ -10,6 +10,8 @@ resource "azurerm_app_service_plan" "inference" {
     size = "P1v2"
   }
 }
+resource "random_uuid" "inference_auth_key" {
+}
 
 resource "azurerm_app_service" "inference" {
   name                = "app-inf-${local.service_resource_name_suffix}"
@@ -29,8 +31,8 @@ resource "azurerm_app_service" "inference" {
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = "True"
 
     "APPLICATION_ID"    = var.inference_sp_client_id
-    "CLUSTER"           = var.azureml_compute_cluster_name
-    "WORKSPACE_NAME"    = var.azureml_workspace_name
+    "CLUSTER"           = local.aml_compute_cluster_name
+    "WORKSPACE_NAME"    = local.aml_workspace_name
     "EXPERIMENT_NAME"   = "main"
     "RESOURCE_GROUP"    = data.azurerm_resource_group.ws.name
     "SUBSCRIPTION_ID"   = data.azurerm_client_config.current.subscription_id
@@ -55,6 +57,11 @@ resource "azurerm_app_service" "inference" {
 resource "azurerm_app_service_virtual_network_swift_connection" "inference" {
   app_service_id = azurerm_app_service.inference.id
   subnet_id      = data.azurerm_subnet.web_apps.id
+}
+
+data "azurerm_private_dns_zone" "azurewebsites" {
+  name                = "privatelink.azurewebsites.net"
+  resource_group_name = local.core_resource_group_name
 }
 
 resource "azurerm_private_endpoint" "inference" {

@@ -5,9 +5,15 @@
   "modified": "2021-06-03T11:54:54.0225968Z",
   "parameters": [
     {
+      "name": "id",
+      "source": {
+        "env": "ID"
+      }
+    },
+    {
       "name": "workspace_id",
       "source": {
-        "env": "WORKSPACE_ID"
+        "env": "ID"
       }
     },
     {
@@ -17,15 +23,15 @@
       }
     },
     {
-      "name": "azureml_workspace_name",
+      "name": "inference_sp_client_id",
       "source": {
-        "env": "AZUREML_WORKSPACE_NAME"
+        "env": "INFERENCE_SP_CLIENT_ID"
       }
     },
     {
-      "name": "azureml_acr_id",
+      "name": "inference_sp_client_secret",
       "source": {
-        "env": "AZUREML_ACR_ID"
+        "env": "INFERENCE_SP_CLIENT_SECRET"
       }
     },
     {

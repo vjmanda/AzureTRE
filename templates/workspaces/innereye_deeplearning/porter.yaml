@@ -32,6 +32,10 @@ parameters:
     default: "10.2.1.0/24"
   - name: mgmt_acr_name
     type: string
+  - name: inference_sp_client_id
+    type: string
+  - name: inference_sp_client_secret
+    type: string 
   - name: tfstate_resource_group_name
     type: string
     description: "Resource group containing the Terraform state storage account"

@@ -39,7 +39,7 @@ data "external" "rule_priorities" {
   query = {
     firewall_name                = data.azurerm_firewall.fw.name
     resource_group_name          = data.azurerm_firewall.fw.resource_group_name
-    service_resource_name_suffix = local.service_resource_name_suffix
+    collection_name_suffix = "${local.service_resource_name_suffix}-aml"
   }
   depends_on = [
     null_resource.az_login_sp,
@@ -48,7 +48,7 @@ data "external" "rule_priorities" {
 }
 
 resource "azurerm_firewall_application_rule_collection" "innereyeapprulecollection" {
-  name                = "arc-${local.service_resource_name_suffix}"
+  name                = "arc-${local.service_resource_name_suffix}-aml"
   azure_firewall_name = data.azurerm_firewall.fw.name
   resource_group_name = data.azurerm_firewall.fw.resource_group_name
   priority            = data.external.rule_priorities.result.application_rule_priority

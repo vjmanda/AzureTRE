@@ -43,7 +43,7 @@ resource "azurerm_network_security_rule" "allow-aml-inbound" {
   direction                   = "Inbound"
   name                        = "${local.short_service_id}-AzureML-inbound"
   network_security_group_name = data.azurerm_network_security_group.ws.name
-  priority                    = tonumber(data.external.nsg_rule_priorities_inbound.result.nsg_rule_priority) + 1
+  priority                    = tonumber(data.external.nsg_rule_priorities_inbound.result.nsg_rule_priority)
   protocol                    = "TCP"
   resource_group_name         = data.azurerm_resource_group.ws.name
   source_port_range           = "*"
