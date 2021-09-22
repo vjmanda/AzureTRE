@@ -1,5 +1,5 @@
 name: tre-service-azureml
-version: 0.1.12
+version: 0.1.14
 description: "An Azure TRE service for Azure Machine Learning"
 registry: azuretre
 dockerfile: Dockerfile.tmpl
@@ -22,7 +22,6 @@ parameters:
   - name: id
     type: string
     description: "An Id for this installation"
-    env: id
   - name: tfstate_resource_group_name
     type: string
     description: "Resource group containing the Terraform state storage account"

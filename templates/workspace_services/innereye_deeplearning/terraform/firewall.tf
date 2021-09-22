@@ -8,8 +8,22 @@ locals {
 }
 
 data "azurerm_client_config" "current" {}
+resource "null_resource" "az_login_sp" {
 
-resource "null_resource" "az_login" {
+  count = var.arm_use_msi == true ? 0 : 1
+  provisioner "local-exec" {
+    command = "az login --service-principal --username ${var.arm_client_id} --password ${var.arm_client_secret} --tenant ${var.arm_tenant_id}"
+  }
+
+  triggers = {
+    timestamp = timestamp()
+  }
+  
+}
+
+resource "null_resource" "az_login_msi" {
+
+  count = var.arm_use_msi == true ? 1 : 0
   provisioner "local-exec" {
     command = "az login --identity -u '${data.azurerm_client_config.current.client_id}'"
   }
@@ -28,7 +42,8 @@ data "external" "rule_priorities" {
     service_resource_name_suffix = local.service_resource_name_suffix
   }
   depends_on = [
-    null_resource.az_login
+    null_resource.az_login_sp,
+    null_resource.az_login_msi
   ]
 }
 

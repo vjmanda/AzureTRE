@@ -11,6 +11,7 @@ data "external" "nsg_rule_priorities_inbound" {
   query = {
     nsg_name            = data.azurerm_network_security_group.ws.name
     resource_group_name = data.azurerm_resource_group.ws.name
+    nsg_rule_name       = "${local.short_service_id}-AzureML-inbound"
     direction           = "Inbound"
   }
   depends_on = [
@@ -24,6 +25,7 @@ data "external" "nsg_rule_priorities_outbound" {
 
   query = {
     nsg_name            = data.azurerm_network_security_group.ws.name
+    nsg_rule_name       = "${local.short_service_id}-allow-Outbound_Storage_445"
     resource_group_name = data.azurerm_resource_group.ws.name
     direction           = "Outbound"
   }
@@ -33,43 +35,15 @@ data "external" "nsg_rule_priorities_outbound" {
   ]
 }
 
-resource "azurerm_network_security_rule" "allow-BatchNodeManagement-inbound-29877" {
+resource "azurerm_network_security_rule" "allow-aml-inbound" {
   access                      = "Allow"
-  destination_port_range      = "29877"
+  destination_port_ranges     = ["29876", "29877", "44224"]
   destination_address_prefix  = "VirtualNetwork"
   source_address_prefix       = "BatchNodeManagement"
   direction                   = "Inbound"
-  name                        = "${local.short_service_id}-BatchNodeManagement-inbound-29877"
+  name                        = "${local.short_service_id}-AzureML-inbound"
   network_security_group_name = data.azurerm_network_security_group.ws.name
-  priority                    = data.external.nsg_rule_priorities_inbound.result.nsg_rule_priority
-  protocol                    = "TCP"
-  resource_group_name         = data.azurerm_resource_group.ws.name
-  source_port_range           = "*"
-}
-
-resource "azurerm_network_security_rule" "allow-BatchNodeManagement-inbound-29876" {
-  access                      = "Allow"
-  destination_port_range      = "29876"
-  destination_address_prefix  = "VirtualNetwork"
-  source_address_prefix       = "BatchNodeManagement"
-  direction                   = "Inbound"
-  name                        = "${local.short_service_id}-BatchNodeManagement-inbound-29876"
-  network_security_group_name = data.azurerm_network_security_group.ws.name
-  priority                    = data.external.nsg_rule_priorities_inbound.result.nsg_rule_priority + 1
-  protocol                    = "TCP"
-  resource_group_name         = data.azurerm_resource_group.ws.name
-  source_port_range           = "*"
-}
-
-resource "azurerm_network_security_rule" "allow-AzureMachineLearning-inbound-44224" {
-  access                      = "Allow"
-  destination_port_range      = "44224"
-  destination_address_prefix  = "VirtualNetwork"
-  source_address_prefix       = "*"
-  direction                   = "Inbound"
-  name                        = "${local.short_service_id}-AzureMachineLearning-inbound-44224"
-  network_security_group_name = data.azurerm_network_security_group.ws.name
-  priority                    = data.external.nsg_rule_priorities_inbound.result.nsg_rule_priority + 2
+  priority                    = tonumber(data.external.nsg_rule_priorities_inbound.result.nsg_rule_priority) + 1
   protocol                    = "TCP"
   resource_group_name         = data.azurerm_resource_group.ws.name
   source_port_range           = "*"

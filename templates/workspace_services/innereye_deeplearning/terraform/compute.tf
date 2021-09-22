@@ -38,7 +38,7 @@ resource "azurerm_resource_group_template_deployment" "deploy_compute_cluster" {
       value = data.azurerm_resource_group.ws.location
     },
     "workspace_name" = {
-      value = var.azureml_workspace_name
+      value = local.aml_workspace_name
     },
     "cluster_name" = {
       value = local.aml_compute_cluster_name
@@ -84,7 +84,7 @@ resource "azurerm_resource_group_template_deployment" "deploy_compute_instance" 
       "value" = data.azurerm_resource_group.ws.location
     },
     "workspace_name" = {
-      "value" = var.azureml_workspace_name
+      "value" = local.aml_workspace_name
     },
     "instance_name" = {
       "value" = local.aml_compute_instance_name

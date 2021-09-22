@@ -5,12 +5,6 @@
   "modified": "2021-06-03T11:54:54.0225968Z",
   "parameters": [
     {
-      "name": "workspace_id",
-      "source": {
-        "env": "WORKSPACE_ID"
-      }
-    },
-    {
       "name": "tre_id",
       "source": {
         "env": "TRE_ID"
