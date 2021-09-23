@@ -26,6 +26,8 @@ parameters:
     type: string
   - name: inference_sp_client_secret
     type: string
+  - name: mgmt_acr_name
+    type: string
   - name: tfstate_resource_group_name
     type: string
     description: "Resource group containing the Terraform state storage account"
@@ -49,10 +51,35 @@ outputs:
 
 mixins:
   - exec
+  - az
+  - docker
   - terraform:
       clientVersion: 1.0.5
 
 install:
+  # - az:
+  #     description: "az login"
+  #     arguments:
+  #       - login
+  #     flags:
+  #       identity:
+  #       username: "{{ bundle.credentials.azure_client_id}}"
+  - az:
+      description: "az login"
+      arguments:
+        - login
+      flags:
+        service-principal:
+        username: "{{ bundle.credentials.azure_client_id}}"
+        password: "{{ bundle.credentials.azure_client_secret}}"
+        tenant: "{{ bundle.credentials.azure_tenant_id}}"
+  - az:
+      description: "acr login"
+      arguments:
+        - acr
+        - login
+      flags:
+        name: "{{ bundle.parameters.mgmt_acr_name }}"
   - exec:
       description: "Install Azure ML service"
       command: ./install_service_azureml.sh

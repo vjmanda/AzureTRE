@@ -10,6 +10,11 @@ RUN apt-get update \
 
 RUN az extension add --name azure-firewall
 
+RUN export PORTER_HOME=/home/$USER/.porter \
+    && curl -L https://cdn.porter.sh/latest/install-linux.sh | bash \
+    && ${PORTER_HOME}/porter mixin install docker
+
+ENV PATH /home/$USER/.porter/:$PATH
 
 ARG BUNDLE_DIR
 
