@@ -3,8 +3,9 @@ resource "azurerm_virtual_network" "core" {
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = [var.core_address_space]
+  
 
-  lifecycle { ignore_changes = [tags, vnet_peerings ] }
+  lifecycle { ignore_changes = [tags ] }
 }
 
 resource "azurerm_subnet" "bastion" {
