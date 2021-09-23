@@ -169,15 +169,6 @@ jobs:
             make register-bundle DIR=./templates/workspaces/base
           fi
 
-          # Check if azureml template is already registered
-          # ***********************************************************
-          export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-templates/tre-workspace-azureml-devtestlabs" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
-
-          if [[ ${STATUS_CODE} == 404 ]]
-          then
-            make register-bundle DIR=./templates/workspaces/azureml
-          fi
-
           # Check if innereye_deeplearning template is already registered
           # *************************************************************
           export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-templates/tre-workspace-innereye-deeplearning" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
@@ -185,15 +176,6 @@ jobs:
           if [[ ${STATUS_CODE} == 404 ]]
           then
             make register-bundle DIR=./templates/workspaces/innereye_deeplearning
-          fi
-
-          # Check if innereye_deeplearning_inference template is already registered
-          # ***********************************************************************
-          export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-templates/tre-workspace-innereye-deeplearning-inference" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
-
-          if [[ ${STATUS_CODE} == 404 ]]
-          then
-            make register-bundle DIR=./templates/workspaces/innereye_deeplearning_inference
           fi
 
   publish_and_register_workspace_service_bundles:
@@ -270,15 +252,6 @@ jobs:
           if [[ ${STATUS_CODE} == 404 ]]
           then
             make register-bundle DIR=./templates/workspace_services/innereye_deeplearning
-          fi
-
-          # Check if tre-service-innereye-inference service template is already registered
-          # *********************************************************
-          export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-service-templates/tre-service-innereye-inference" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
-
-          if [[ ${STATUS_CODE} == 404 ]]
-          then
-            make register-bundle DIR=./templates/workspace_services/innereye_inference
           fi
 
   e2e_tests:
@@ -393,29 +366,7 @@ jobs:
   #     uses: azure/login@v1
   #     with:
   #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #   - name: Publish and deploy azureml workspace bundle
-  #     shell: bash
-  #     env:
-  #       TRE_ID: ${{ secrets.TRE_ID }}
-  #       LOCATION: ${{ secrets.LOCATION }}
-  #       WORKSPACE_ID: "0002"
-  #       ADDRESS_SPACE: "10.2.2.0/24"
-  #       ACR_NAME: ${{ secrets.ACR_NAME }}
-  #       TERRAFORM_STATE_CONTAINER_NAME: ${{ secrets.TF_STATE_CONTAINER }}
-  #       MGMT_RESOURCE_GROUP_NAME: ${{ secrets.MGMT_RESOURCE_GROUP }}
-  #       MGMT_STORAGE_ACCOUNT_NAME: ${{ secrets.STATE_STORAGE_ACCOUNT_NAME }}
-  #       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-  #     run: |
-  #         export USE_ENV_VARS_NOT_FILES=true
-  #         export env
-  #         export ARM_CLIENT_ID=$(echo "$AZURE_CREDENTIALS" | jq -r '.clientId')
-  #         export ARM_CLIENT_SECRET=$(echo "$AZURE_CREDENTIALS" | jq -r '.clientSecret')
-  #         export ARM_SUBSCRIPTION_ID=$(echo "$AZURE_CREDENTIALS" | jq -r '.subscriptionId')
-  #         export ARM_TENANT_ID=$(echo "$AZURE_CREDENTIALS" | jq -r '.tenantId')
-  #         curl -L https://cdn.porter.sh/latest/install-linux.sh | bash && ~/.porter/porter mixin install docker
-  #         export PATH=~/.porter/:$PATH
-  #         make porter-publish DIR=./templates/workspaces/azureml
-  #         make porter-install DIR=./templates/workspaces/azureml
+  
   # deploy_innereye_deeplearning_workspace:
   #   name: Deploy InnerEye Deep Learning Workspace
   #   needs: [deploy_azureml_workspace]

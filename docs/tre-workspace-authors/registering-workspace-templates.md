@@ -13,7 +13,7 @@ The script can also be used to generate the payload required by the API without 
 
 ### Registration using Swagger UI
 
-1. We will use the utility script to generate the payload. The script needs to be executed from within the bundle directory, for example `/templates/workspaces/azureml/`. This script can be used as follows:
+1. We will use the utility script to generate the payload. The script needs to be executed from within the bundle directory, for example `/templates/workspaces/base/`. This script can be used as follows:
 
    ```cmd
    ../../../devops/scripts/publish_register_bundle.sh -r <acr_name> -i -t workspace
@@ -33,7 +33,7 @@ The script can also be used to generate the payload required by the API without 
 
 To use the script to automatically register the template, a user that does not require an interactive login must be created as per the [e2e test user documentation here](../tre-admins/deploying-the-tre/auth.md#tre-e2e-test).
 
-The script needs to be executed from within the bundle directory, for example `/templates/workspaces/azureml/`.
+The script needs to be executed from within the bundle directory, for example `/templates/workspaces/base/`.
 
 This script can be used as follows:
 
