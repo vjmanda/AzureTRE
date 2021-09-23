@@ -1,4 +1,4 @@
-name: tre-workspace-innereye-deeplearning
+name: tre-workspace-innereye
 
 version: 0.1.8
 description: "An Azure TRE workspace with Azure Machine Learning, Dev Test Labs and InnerEye deep learning"
@@ -86,11 +86,8 @@ install:
       description: "Install Base Workspace service"
       command: ./install_workspace_base.sh
   - exec:
-      description: "Install Azure ML service"
-      command: ./install_service_azureml.sh
-  - exec:
       description: "Install InnerEye Deep Learning service"
-      command: ./install_service_innereye_deeplearning.sh
+      command: ./install_service_innereye.sh
 
 upgrade:
   - exec:

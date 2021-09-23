@@ -1,27 +1,9 @@
 {
   "schemaVersion": "1.0.0-DRAFT+TODO",
-  "name": "workspace-innereye-deeplearning",
+  "name": "innereye",
   "created": "2021-06-03T11:54:54.0225968Z",
   "modified": "2021-06-03T11:54:54.0225968Z",
   "parameters": [
-    {
-      "name": "address_space",
-      "source": {
-        "env": "ADDRESS_SPACE"
-      }
-    },
-    {
-      "name": "tre_id",
-      "source": {
-        "env": "TRE_ID"
-      }
-    },
-    {
-      "name": "azure_location",
-      "source": {
-        "env": "LOCATION"
-      }
-    },
     {
       "name": "id",
       "source": {
@@ -29,9 +11,15 @@
       }
     },
     {
-      "name": "mgmt_acr_name",
+      "name": "workspace_id",
       "source": {
-        "env": "ACR_NAME"
+        "env": "ID"
+      }
+    },
+    {
+      "name": "tre_id",
+      "source": {
+        "env": "TRE_ID"
       }
     },
     {
@@ -62,6 +50,12 @@
       "name": "tfstate_storage_account_name",
       "source": {
         "env": "MGMT_STORAGE_ACCOUNT_NAME"
+      }
+    },
+    {
+      "name": "arm_use_msi",
+      "source": {
+        "env": "ARM_USE_MSI"
       }
     }
   ]

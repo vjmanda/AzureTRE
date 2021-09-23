@@ -169,13 +169,13 @@ jobs:
             make register-bundle DIR=./templates/workspaces/base
           fi
 
-          # Check if innereye_deeplearning template is already registered
+          # Check if innereye template is already registered
           # *************************************************************
-          export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-templates/tre-workspace-innereye-deeplearning" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
+          export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-templates/tre-workspace-innereye" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
 
           if [[ ${STATUS_CODE} == 404 ]]
           then
-            make register-bundle DIR=./templates/workspaces/innereye_deeplearning
+            make register-bundle DIR=./templates/workspaces/innereye
           fi
 
   publish_and_register_workspace_service_bundles:
@@ -210,7 +210,7 @@ jobs:
 
           make porter-build DIR=./templates/workspace_services/azureml
           make porter-build DIR=./templates/workspace_services/devtestlabs
-          make porter-build DIR=./templates/workspace_services/innereye_deeplearning
+          make porter-build DIR=./templates/workspace_services/innereye
           make porter-build DIR=./templates/workspace_services/innereye_inference
 
           # Get TRE API access token
@@ -245,13 +245,13 @@ jobs:
             make register-bundle DIR=./templates/workspace_services/devtestlabs
           fi
 
-          # Check if tre-service-innereye-deeplearning service template is already registered
+          # Check if tre-service-innereye service template is already registered
           # *********************************************************
-          export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-service-templates/tre-service-innereye-deeplearning" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
+          export STATUS_CODE=$(curl -X "GET" "${TRE_URL}/api/workspace-service-templates/tre-service-innereye" -H "accept: application/json" -H "Authorization: Bearer ${TOKEN}" -k -s -w "%{http_code}" -o /dev/null)
 
           if [[ ${STATUS_CODE} == 404 ]]
           then
-            make register-bundle DIR=./templates/workspace_services/innereye_deeplearning
+            make register-bundle DIR=./templates/workspace_services/innereye
           fi
 
   e2e_tests:
@@ -366,8 +366,8 @@ jobs:
   #     uses: azure/login@v1
   #     with:
   #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  
-  # deploy_innereye_deeplearning_workspace:
+
+  # deploy_innereye_workspace:
   #   name: Deploy InnerEye Deep Learning Workspace
   #   needs: [deploy_azureml_workspace]
   #   runs-on: ubuntu-latest
@@ -400,11 +400,11 @@ jobs:
   #         export ARM_TENANT_ID=$(echo "$AZURE_CREDENTIALS" | jq -r '.tenantId')
   #         curl -L https://cdn.porter.sh/latest/install-linux.sh | bash && ~/.porter/porter mixin install docker
   #         export PATH=~/.porter/:$PATH
-  #         make porter-publish DIR=./templates/workspaces/innereye_deeplearning
-  #         make porter-install DIR=./templates/workspaces/innereye_deeplearning
-  # deploy_innereye_deeplearning_inference_workspace:
+  #         make porter-publish DIR=./templates/workspaces/innereye
+  #         make porter-install DIR=./templates/workspaces/innereye
+  # deploy_innereye_inference_workspace:
   #   name: Deploy InnerEye Deep Learning & Inference Workspace
-  #   needs: [deploy_innereye_deeplearning_workspace]
+  #   needs: [deploy_innereye_workspace]
   #   runs-on: ubuntu-latest
   #   environment: Dev
   #   steps:
@@ -414,7 +414,7 @@ jobs:
   #     uses: azure/login@v1
   #     with:
   #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #   - name: Publish and deploy innereye_deeplearning_inference workspace bundle
+  #   - name: Publish and deploy innereye_inference workspace bundle
   #     shell: bash
   #     env:
   #       TRE_ID: ${{ secrets.TRE_ID }}
@@ -437,5 +437,5 @@ jobs:
   #         export INFERENCE_SP_CLIENT_SECRET=$(echo "$AZURE_CREDENTIALS" | jq -r '.clientSecret')
   #         curl -L https://cdn.porter.sh/latest/install-linux.sh | bash && ~/.porter/porter mixin install docker
   #         export PATH=~/.porter/:$PATH
-  #         make porter-publish DIR=./templates/workspaces/innereye_deeplearning_inference
-  #         make porter-install DIR=./templates/workspaces/innereye_deeplearning_inference
+  #         make porter-publish DIR=./templates/workspaces/innereye_inference
+  #         make porter-install DIR=./templates/workspaces/innereye_inference

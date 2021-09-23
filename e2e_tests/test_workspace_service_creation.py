@@ -22,7 +22,7 @@ workspace_service_templates = [
     (strings.AZUREML_SERVICE),
     (strings.DEVTESTLABS_SERVICE),
     (strings.GUACAMOLE_SERVICE),
-    (strings.INNEREYE_DEEPLEARNING_SERVICE),
+    (strings.innereye_SERVICE),
     (strings.INNEREYE_INFERENCE_SERVICE)
 ]
 

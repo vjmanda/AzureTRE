@@ -1,4 +1,4 @@
-name: tre-service-innereye-deeplearning
+name: tre-service-innereye
 version: 0.1.2
 description: "An Azure TRE service for InnerEye Deep Learning"
 registry: azuretre
@@ -53,6 +53,9 @@ mixins:
       clientVersion: 1.0.5
 
 install:
+  - exec:
+      description: "Install Azure ML service"
+      command: ./install_service_azureml.sh
   - terraform:
       description: "Deploy service"
       vars:
@@ -69,7 +72,7 @@ install:
         resource_group_name: "{{ bundle.parameters.tfstate_resource_group_name }}"
         storage_account_name: "{{ bundle.parameters.tfstate_storage_account_name }}"
         container_name: "{{ bundle.parameters.tfstate_container_name }}"
-        key: "tre-service-innereye-deeplearning-{{ bundle.parameters.id }}"
+        key: "tre-service-innereye-{{ bundle.parameters.id }}"
       outputs:
       - name: azureml_compute_cluster_name
 
@@ -97,4 +100,4 @@ uninstall:
         resource_group_name: "{{ bundle.parameters.tfstate_resource_group_name }}"
         storage_account_name: "{{ bundle.parameters.tfstate_storage_account_name }}"
         container_name: "{{ bundle.parameters.tfstate_container_name }}"
-        key: "tre-service-innereye-deeplearning-{{ bundle.parameters.id }}"
+        key: "tre-service-innereye-{{ bundle.parameters.id }}"

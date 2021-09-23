@@ -1,9 +1,27 @@
 {
   "schemaVersion": "1.0.0-DRAFT+TODO",
-  "name": "innereye-deeplearning",
+  "name": "workspace-innereye",
   "created": "2021-06-03T11:54:54.0225968Z",
   "modified": "2021-06-03T11:54:54.0225968Z",
   "parameters": [
+    {
+      "name": "address_space",
+      "source": {
+        "env": "ADDRESS_SPACE"
+      }
+    },
+    {
+      "name": "tre_id",
+      "source": {
+        "env": "TRE_ID"
+      }
+    },
+    {
+      "name": "azure_location",
+      "source": {
+        "env": "LOCATION"
+      }
+    },
     {
       "name": "id",
       "source": {
@@ -11,15 +29,9 @@
       }
     },
     {
-      "name": "workspace_id",
+      "name": "mgmt_acr_name",
       "source": {
-        "env": "WORKSPACE_ID"
-      }
-    },
-    {
-      "name": "tre_id",
-      "source": {
-        "env": "TRE_ID"
+        "env": "ACR_NAME"
       }
     },
     {
