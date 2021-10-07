@@ -35,15 +35,7 @@ export class UserResourceCreateComponent extends resourceCreateComponent {
     selectTemplate(template: Template) {
         this.template = template;
         console.log('Template selected' + this.template);
-        // this.schema = this.dreApi.getUserResourceTemplate(this.currentWorkspaceService.resourceTemplateName, template.name);
-        let tmptemplate = new Template()
-        tmptemplate.properties = schemaAsset.properties;
-        this.schema = new Observable(observer => {
-            observer.next(tmptemplate)
-            observer.complete()
-        })
-
-
+        this.schema = this.dreApi.getUserResourceTemplate(this.currentWorkspaceService.resourceTemplateName, template.name);
         console.log("Schema:" + JSON.stringify(this.schema));
         this.templateSelected = true;
     }
