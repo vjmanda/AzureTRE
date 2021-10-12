@@ -10,6 +10,7 @@ def get_sample_user_resource_template_object(template_name: str = "guacamole-vm"
     return UserResourceTemplate(
         id="a7a7a7bd-7f4e-4a4e-b970-dc86a6b31dfb",
         name=template_name,
+        title="Guacamole VM",
         parentWorkspaceService="guacamole",
         description="user resource bundle",
         version="0.1.0",
@@ -45,8 +46,8 @@ class UserResourceTemplateInCreate(ResourceTemplateInCreate):
                     "$schema": "http://json-schema.org/draft-07/schema",
                     "$id": "https://github.com/microsoft/AzureTRE/templates/workspaces/myworkspace/user_resource.json",
                     "type": "object",
-                    "title": "My User Resource Template Custom Parameters",
-                    "description": "These parameters are specific to my user resource template",
+                    "title": "My User Resource Template",
+                    "description": "These is a test user resource template schema",
                     "required": [],
                     "properties": {}
                 }

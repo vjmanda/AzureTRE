@@ -7,11 +7,11 @@
 
 1. Open the `/devops/.env.sample` file and then save it without the .sample extension. You should now have a file called `.env` located in the `/devops` folder. The file contains configuration variables for the shared management infrastructure which is used to support the deployment of one or more Azure TRE instances.
 
-  You need to provide values for the following variables:
+2. Provide the values for the following variables:
 
   | Variable | Description |
   | -------- | ----------- |
-  | `LOCATION` | The [Azure location (region)](https://azure.microsoft.com/global-infrastructure/geographies/#geographies) for all resources. |
+  | `LOCATION` | The [Azure location (region)](https://azure.microsoft.com/global-infrastructure/geographies/#geographies) for all resources. E.g., `westeurope` |
   | `MGMT_RESOURCE_GROUP_NAME` | The shared resource group for all management resources, including the storage account. |
   | `MGMT_STORAGE_ACCOUNT_NAME` | The name of the storage account to hold the Terraform state and other deployment artifacts. |
   | `ACR_NAME` | A globally unique name for the [Azure Container Registry (ACR)](https://docs.microsoft.com/azure/container-registry/) that will be created to store deployment images. |
@@ -19,14 +19,6 @@
 
   !!! tip
       To retrieve your Azure subscription ID, use the `az` command line interface available in the development container. In the terminal window in Visual Studio Code, type `az login` followed by `az account show` to see your default subscription. Please refer to `az account -help` for further details on how to change your active subscription.
-
-2. Comment out the following variables by starting the line with a hash `#`.
-
-  ```cmd
-  # ARM_TENANT_ID=...
-  # ARM_CLIENT_ID=...
-  # ARM_CLIENT_SECRET=...
-  ```
 
 The rest of the variables can have their default values. You should now have a `.env` file that looks similar to the one below:
 
@@ -36,17 +28,14 @@ LOCATION=westeurope
 MGMT_RESOURCE_GROUP_NAME=aztremgmt
 MGMT_STORAGE_ACCOUNT_NAME=aztremgmt
 TERRAFORM_STATE_CONTAINER_NAME=tfstate
-IMAGE_TAG=dev
 ACR_NAME=aztreacr
 
 ARM_SUBSCRIPTION_ID=12...54e
 
-# Azure Resource Manager credentials used for CI/CD pipelines
+# If you want to override the currently signed in credentials
 # ARM_TENANT_ID=__CHANGE_ME__
 # ARM_CLIENT_ID=__CHANGE_ME__
 # ARM_CLIENT_SECRET=__CHANGE_ME__
-
-PORTER_OUTPUT_CONTAINER_NAME=porterout
 
 # Debug mode
 DEBUG="false"
@@ -70,12 +59,11 @@ Next, you will set the configuration variables for the specific Azure TRE instan
 1. Run the `/scripts/aad-app-reg.sh` script to create API and Swagger UI app registrations and their service principals. The details of the script are covered [app registration script](../auth.md#app-registration-script) section of the auth document. Below is a sample where `TRE_ID` has value `mytre` and the Azure location is `westeurope`:
 
   ```bash
-  /workspaces/tre> ./scripts/aad-app-reg.sh -n TRE -r https://mytre.westeurope.cloudapp.azure.com/oidc-redirect -a
+  /workspaces/tre> ./scripts/aad-app-reg.sh -n TRE -r https://mytre.westeurope.cloudapp.azure.com/api/docs/oauth2-redirect -a
   ```
 
   !!! note
       The full functionality of the script requires directory admin privileges. You may need to contact your friendly AAD admin to complete this step. The app registrations can be created manually in Azure Portal too. For more information, see [Authentication and authorization](../auth.md).
-
 
   With the output of the script, you can now provide the required auth related values for the following variables in the `/templates/core/.env` configuration file:
 
@@ -93,9 +81,6 @@ All other variables can have their default values for now. You should now have a
 TRE_ID=mytre
 CORE_ADDRESS_SPACE="10.1.0.0/22"
 TRE_ADDRESS_SPACE="10.0.0.0/12"
-API_IMAGE_TAG=dev
-RESOURCE_PROCESSOR_VMSS_PORTER_IMAGE_TAG=dev
-GITEA_IMAGE_TAG=dev
 DEPLOY_GITEA=true
 RESOURCE_PROCESSOR_TYPE="vmss_porter"
 
