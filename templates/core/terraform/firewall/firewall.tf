@@ -22,6 +22,13 @@ resource "azurerm_firewall" "fw" {
   lifecycle { ignore_changes = [tags] }
 }
 
+resource "azurerm_management_lock" "fw" {
+  name       = azurerm_firewall.fw.name
+  scope      = azurerm_firewall.fw.id
+  lock_level = "CanNotDelete"
+  notes      = "Locked to prevent accidental deletion"
+}
+
 resource "azurerm_monitor_diagnostic_setting" "firewall" {
   name                       = "diagnostics-firewall-${var.tre_id}"
   target_resource_id         = azurerm_firewall.fw.id
@@ -79,6 +86,46 @@ resource "azurerm_monitor_diagnostic_setting" "firewall" {
   }
 }
 
+resource "azurerm_firewall_application_rule_collection" "shared_subnet" {
+  name                = "arc-shared_subnet"
+  azure_firewall_name = azurerm_firewall.fw.name
+  resource_group_name = azurerm_firewall.fw.resource_group_name
+  priority            = 100
+  action              = "Allow"
+
+  rule {
+    name = "admin-resources"
+
+    protocol {
+      port = "443"
+      type = "Https"
+    }
+
+    protocol {
+      port = "80"
+      type = "Http"
+    }
+
+    target_fqdns = [
+      "go.microsoft.com",
+      "*.azureedge.net",
+      "*github.com",
+      "*powershellgallery.com",
+      "git-scm.com",
+      "*githubusercontent.com",
+      "*core.windows.net",
+      "aka.ms",
+      "management.azure.com",
+      "graph.microsoft.com",
+      "login.microsoftonline.com",
+      "aadcdn.msftauth.net",
+      "graph.windows.net"
+    ]
+
+    source_addresses = data.azurerm_subnet.shared.address_prefixes
+  }
+}
+
 resource "azurerm_firewall_application_rule_collection" "resource_processor_subnet" {
   name                = "arc-resource_processor_subnet"
   azure_firewall_name = azurerm_firewall.fw.name
@@ -114,6 +161,40 @@ resource "azurerm_firewall_application_rule_collection" "resource_processor_subn
     source_addresses = data.azurerm_subnet.resource_processor.address_prefixes
   }
 
+  depends_on = [
+    azurerm_firewall_application_rule_collection.shared_subnet
+  ]
+}
+
+resource "azurerm_firewall_network_rule_collection" "general" {
+  name                = "general"
+  azure_firewall_name = azurerm_firewall.fw.name
+  resource_group_name = azurerm_firewall.fw.resource_group_name
+  priority            = 100
+  action              = "Allow"
+
+  rule {
+    name = "time"
+
+    protocols = [
+      "UDP"
+    ]
+
+    destination_addresses = [
+      "*"
+    ]
+
+    destination_ports = [
+      "123"
+    ]
+    source_addresses = [
+      "*"
+    ]
+  }
+
+  depends_on = [
+    azurerm_firewall_application_rule_collection.resource_processor_subnet
+  ]
 }
 
 resource "azurerm_firewall_network_rule_collection" "resource_processor_subnet" {
@@ -146,7 +227,7 @@ resource "azurerm_firewall_network_rule_collection" "resource_processor_subnet" 
   }
 
   depends_on = [
-    azurerm_firewall_application_rule_collection.resource_processor_subnet
+    azurerm_firewall_network_rule_collection.general
   ]
 }
 

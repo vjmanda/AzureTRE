@@ -12,7 +12,7 @@ resource "azurerm_app_service_plan" "core" {
   sku {
     tier     = "PremiumV3"
     capacity = 1
-    size     = "P1V3"
+    size     = "P1v3"
   }
 }
 
@@ -57,7 +57,7 @@ resource "azurerm_app_service" "api" {
   lifecycle { ignore_changes = [tags] }
 
   site_config {
-    linux_fx_version                     = "DOCKER|${var.docker_registry_server}/${var.api_image_repository}:${var.api_image_tag}"
+    linux_fx_version                     = "DOCKER|${var.docker_registry_server}/${var.api_image_repository}:${local.version}"
     remote_debugging_enabled             = false
     scm_use_main_ip_restriction          = true
     acr_use_managed_identity_credentials = true
@@ -68,7 +68,7 @@ resource "azurerm_app_service" "api" {
       support_credentials = false
     }
 
-    always_on       = false
+    always_on       = true
     min_tls_version = "1.2"
 
     ip_restriction {
@@ -215,10 +215,4 @@ resource "azurerm_monitor_diagnostic_setting" "webapp_api" {
       enabled = false
     }
   }
-}
-
-resource "azurerm_role_assignment" "acrpull_role" {
-  scope                = var.acr_id
-  role_definition_name = "AcrPull"
-  principal_id         = var.managed_identity.principal_id
 }
