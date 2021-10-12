@@ -195,7 +195,7 @@ Go to ``azure_tre_fqdn/docs`` and use POST /api/workspaces with the sample body 
 {
   "displayName": "manual-from-swagger",
   "description": "workspace for team X",
-  "workspaceType": "tre-workspace-base",
+  "templateName": "tre-workspace-base",
   "parameters": {},
   "authConfig": {
     "provider": "AAD",

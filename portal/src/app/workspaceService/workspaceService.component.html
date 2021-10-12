@@ -1,14 +1,14 @@
 <mat-expansion-panel>
   <mat-expansion-panel-header>
     <span>
-      {{ workspaceService.resourceTemplateParameters.display_name }}
+      {{ workspaceService.properties.display_name }}
     </span>
     <span class="example-spacer"></span><mat-chip-list>
     <mat-chip class="{{workspaceService.deployment.status}}" matTooltip="{{workspaceService.deployment.message}}"
       matTooltipPosition="below" matTooltipHideDelay="5000">{{workspaceService.deployment.status}}</mat-chip>
   </mat-chip-list>
-    <button *ngIf="workspaceService.resourceTemplateParameters.connection_uri" mat-raised-button color="primary"
-      (click)="openLink(workspaceService.resourceTemplateParameters.connection_uri)">Connect</button>
+    <button *ngIf="workspaceService.properties.connection_uri" mat-raised-button color="primary"
+      (click)="openLink(workspaceService.properties.connection_uri)">Connect</button>
     <button *ngIf="hasUserResourceTemplates" mat-raised-button color="primary"
       (click)="$event.stopPropagation();openCreateUserResourceDialog()">
       <mat-icon>add</mat-icon>
@@ -21,15 +21,15 @@
   </mat-expansion-panel-header>
 
   <span>
-    {{ workspaceService.resourceTemplateParameters.description }}
+    {{ workspaceService.properties.description }} {{ workspaceService.templateVersion }}
   </span>
   <!-- add if are user resources-->
   <div style="display:flex; flex-direction: row;">
     <!-- for each user resource -->
     <mat-card *ngFor="let userResource of userResources;">
       <mat-card-header>
-        <mat-card-title>{{ userResource.resourceTemplateParameters.display_name }}</mat-card-title>
-        <mat-card-subtitle>{{ userResource.resourceTemplateParameters.description }}</mat-card-subtitle>
+        <mat-card-title>{{ userResource.properties.display_name }}</mat-card-title>
+        <mat-card-subtitle>{{ userResource.properties.description }} {{ userResource.templateVersion }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <mat-chip-list>
@@ -39,8 +39,8 @@
         </mat-chip-list>
       </mat-card-content>
       <mat-card-actions>
-        <button *ngIf="userResource.resourceTemplateParameters.connection_uri" mat-raised-button color="primary"
-          (click)="openLink(userResource.resourceTemplateParameters.connection_uri)">Connect</button>
+        <button *ngIf="userResource.properties.connection_uri" mat-raised-button color="primary"
+          (click)="openLink(userResource.properties.connection_uri)">Connect</button>
         <button mat-raised-button color="primary">Stop</button>
         <button mat-raised-button color="warn">Delete</button>
       </mat-card-actions>

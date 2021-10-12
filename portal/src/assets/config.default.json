@@ -3,7 +3,7 @@
     "dreDnsSuffix": "internal.drelocal",
     "oidc_issuer": "https://login.microsoftonline.com/6ece8aed-4b59-4430-a395-348b3ce6e153/v2.0",
     "oidc_authority": "https://login.microsoftonline.com/6ece8aed-4b59-4430-a395-348b3ce6e153",
-    "oidc_client_id": "bbfbfd5b-dd00-4756-9cb6-f6b73aae6084",
-    "oidc_api_scope": "api://f91b6332-5b7d-480a-bd66-5004531d7bd5/Workspace.Read api://f91b6332-5b7d-480a-bd66-5004531d7bd5/Workspace.Write",
+    "oidc_client_id": "98766446-1ed3-4c9a-8595-c6fae3c939eb",
+    "oidc_api_scope": "api://4430e407-9cec-4ead-ab89-b62e32961387/Workspace.Read api://4430e407-9cec-4ead-ab89-b62e32961387/Workspace.Write",
     "base_uri": "http://localhost:4200"
 }

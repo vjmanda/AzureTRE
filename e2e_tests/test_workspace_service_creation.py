@@ -84,7 +84,7 @@ async def post_workspace_service_template(workspace_id, payload, token, verify):
             f"https://{config.TRE_ID}.{config.RESOURCE_LOCATION}.cloudapp.azure.com{strings.API_WORKSPACES}/{workspace_id}/{strings.API_WORKSPACE_SERVICES}",
             headers=headers, json=payload)
 
-        assert (response.status_code == status.HTTP_202_ACCEPTED), f"Request for workspace service {payload['workspaceServiceType']} creation failed"
+        assert (response.status_code == status.HTTP_202_ACCEPTED), f"Request for workspace service {payload['templateName']} creation failed"
 
         workspace_service_id = response.json()["workspaceServiceId"]
 
@@ -105,7 +105,7 @@ async def disable_workspace_service(workspace_id, workspace_service_id, token, v
             f"https://{config.TRE_ID}.{config.RESOURCE_LOCATION}.cloudapp.azure.com{strings.API_WORKSPACES}/{workspace_id}/{strings.API_WORKSPACE_SERVICES}/{workspace_service_id}",
             headers=headers, json=payload)
 
-        enabled = response.json()["workspaceService"]["resourceTemplateParameters"]["enabled"]
+        enabled = response.json()["workspaceService"]["properties"]["enabled"]
         assert (enabled is False), "The workspace service wasn't disabled"
 
 
@@ -161,7 +161,7 @@ async def test_getting_templates(template_name, token, verify) -> None:
 @pytest.mark.timeout(3000)
 async def test_create_guacamole_service_into_base_workspace(token, verify) -> None:
     payload = {
-        "workspaceType": "tre-workspace-base",
+        "templateName": "tre-workspace-base",
         "properties": {
             "display_name": "E2E test guacamole service",
             "description": "workspace for E2E",
@@ -173,7 +173,7 @@ async def test_create_guacamole_service_into_base_workspace(token, verify) -> No
 #   Enable when guacamole service deletion bug is fixed
 #   ***************************************************
 #   service_payload = {
-#       "workspaceServiceType": "tre-service-guacamole",
+#       "templateName": "tre-service-guacamole",
 #       "properties": {
 #           "display_name": "Workspace service test",
 #           "description": "Workspace service for E2E test"

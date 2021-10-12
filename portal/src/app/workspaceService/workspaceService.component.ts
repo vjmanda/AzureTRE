@@ -29,7 +29,7 @@ export class WorkspaceServiceComponent implements OnInit {
 
 
   ngOnInit() {
-    this.dreApi.getUserResourceTemplates(this.workspaceService.resourceTemplateName)
+    this.dreApi.getUserResourceTemplates(this.workspaceService.templateName)
       .subscribe(templates => { if (templates.length > 0) this.hasUserResourceTemplates = true; });
 
     this.dreApi.getUserResources(this.workspaceService).subscribe({

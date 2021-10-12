@@ -12,9 +12,9 @@
 <div style="display:flex; flex-direction: row;flex-wrap: wrap">
     <mat-card *ngFor="let workspace of workspaces;" (click)="selectWorkspace(workspace)">
         <mat-card-header>
-            <mat-card-title> {{workspace.resourceTemplateParameters.display_name}}</mat-card-title>
+            <mat-card-title> {{workspace.properties.display_name}}</mat-card-title>
             <mat-card-subtitle>
-                {{workspace.resourceTemplateParameters.description}}<br /><br />{{workspace.resourceTemplateParameters.workspace_id}}
+                {{workspace.properties.description}}<br /><br />{{workspace.properties.workspace_id}} {{workspace.templateVersion}}
             </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>

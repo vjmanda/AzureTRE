@@ -1,4 +1,4 @@
 export class UserResourceCreateRequest {
   properties: object;
-  userResourceType: string;
+  templateName: string;
 }

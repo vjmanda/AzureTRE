@@ -28,14 +28,14 @@ export class UserResourceCreateComponent extends resourceCreateComponent {
     schema: Observable<Template>;
 
 
-    templates$: Observable<Template[]> = this.dreApi.getUserResourceTemplates(this.currentWorkspaceService.resourceTemplateName)
+    templates$: Observable<Template[]> = this.dreApi.getUserResourceTemplates(this.currentWorkspaceService.templateName)
         .pipe(map(templates => templates));
 
 
     selectTemplate(template: Template) {
         this.template = template;
         console.log('Template selected' + this.template);
-        // this.schema = this.dreApi.getUserResourceTemplate(this.currentWorkspaceService.resourceTemplateName, template.name);
+        // this.schema = this.dreApi.getUserResourceTemplate(this.currentWorkspaceService.templateName, template.name);
         let tmptemplate = new Template()
         tmptemplate.properties = schemaAsset.properties;
         this.schema = new Observable(observer => {
@@ -63,7 +63,7 @@ export class UserResourceCreateComponent extends resourceCreateComponent {
 
         this.submitted = true;
         const req: UserResourceCreateRequest = {
-            userResourceType: this.template.name,
+            templateName: this.template.name,
             properties: this.formData
         };
         console.log(this.formData);

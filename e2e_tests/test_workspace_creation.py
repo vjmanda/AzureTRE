@@ -81,7 +81,7 @@ async def post_workspace_template(payload, token, verify):
             f"https://{config.TRE_ID}.{config.RESOURCE_LOCATION}.cloudapp.azure.com{strings.API_WORKSPACES}",
             headers=headers, json=payload)
 
-        assert (response.status_code == status.HTTP_202_ACCEPTED), f"Request for workspace {payload['workspaceType']} creation failed"
+        assert (response.status_code == status.HTTP_202_ACCEPTED), f"Request for workspace {payload['templateName']} creation failed"
 
         workspaceid = response.json()["workspaceId"]
 
@@ -108,7 +108,7 @@ async def disable_workspace(token, verify) -> None:
             f"https://{config.TRE_ID}.{config.RESOURCE_LOCATION}.cloudapp.azure.com{strings.API_WORKSPACES}/{workspaceid}",
             headers=headers, json=payload)
 
-        enabled = response.json()["workspace"]["resourceTemplateParameters"]["enabled"]
+        enabled = response.json()["workspace"]["properties"]["enabled"]
         assert (enabled is False), "The workspace wasn't disabled"
 
 
@@ -168,7 +168,7 @@ async def test_getting_templates(template_name, token, verify) -> None:
 @pytest.mark.timeout(1800)
 async def test_create_devtestlabs_workspace(token, verify) -> None:
     payload = {
-        "workspaceType": "tre-workspace-azureml-devtestlabs",
+        "templateName": "tre-workspace-azureml-devtestlabs",
         "properties": {
             "display_name": "E2E test",
             "description": "workspace for E2E",
@@ -183,7 +183,7 @@ async def test_create_devtestlabs_workspace(token, verify) -> None:
 @pytest.mark.timeout(2400)
 async def test_create_innereys_dl_workspace(token, verify) -> None:
     payload = {
-        "workspaceType": "tre-workspace-azureml-devtestlabs",
+        "templateName": "tre-workspace-azureml-devtestlabs",
         "properties": {
             "display_name": "E2E test",
             "description": "workspace for E2E",
@@ -198,7 +198,7 @@ async def test_create_innereys_dl_workspace(token, verify) -> None:
 @pytest.mark.timeout(3000)
 async def test_create_innereys_dl_inference_workspace(token, verify) -> None:
     payload = {
-        "workspaceType": "tre-workspace-azureml-devtestlabs",
+        "templateName": "tre-workspace-azureml-devtestlabs",
         "properties": {
             "display_name": "E2E test",
             "description": "workspace for E2E",
