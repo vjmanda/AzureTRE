@@ -1,7 +1,7 @@
 
 export class Workspace {
     id: string;
-    resourceTemplateParameters: {
+    properties: {
         workspace_id: string;
         display_name: string;
         description: string;

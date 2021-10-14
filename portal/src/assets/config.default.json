@@ -7,4 +7,3 @@
     "oidc_api_scope": "api://4430e407-9cec-4ead-ab89-b62e32961387/Workspace.Read api://4430e407-9cec-4ead-ab89-b62e32961387/Workspace.Write",
     "base_uri": "http://localhost:4200"
 }
-

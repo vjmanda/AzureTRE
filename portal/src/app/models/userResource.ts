@@ -3,8 +3,8 @@ export class UserResource {
     ownerId: string;
     workspaceId: string;
     parentWorkspaceServiceId: string;
-    resourceTemplateName: string;
-    resourceTemplateParameters: {
+    templateName: string;
+    properties: {
         display_name: string;
         description: string;
         connection_uri: string;

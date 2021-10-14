@@ -50,7 +50,7 @@ export class WorkspaceCreateComponent extends resourceCreateComponent {
 
         this.submitted = true;
         const req: workspaceCreateRequest = {
-            workspaceType: this.Template.name,
+            templateName: this.Template.name,
             properties: this.formData
         };
         console.log(this.formData);

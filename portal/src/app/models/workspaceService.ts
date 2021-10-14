@@ -1,8 +1,9 @@
 export class WorkspaceService {
     id: string;
-    resourceTemplateName: string;
+    templateName: string;
+    templateVersion: string;
     workspaceId: string;
-    resourceTemplateParameters: {
+    properties: {
 
         display_name: string;
         description: string;
