@@ -1,5 +1,7 @@
 # Resource Processor (VMSS)
 
+Resource Processor is the Azure TRE component automating [Porter](https://porter.sh) bundle deployments. It hosts Porter and its dependencies.
+
 ## Build and run the container
 
 1. Navigate to `resource_processor/` folder and run `docker build` command:
@@ -73,7 +75,7 @@ Resource Processor uses [Porter Azure plugin](https://github.com/getporter/azure
 
 ## Debugging the deployed processor on Azure
 
-See the [debugging and troubleshooting guide](../tre-admins/troubleshooting-guide.md)
+See the [debugging and troubleshooting guide](../tre-admins/troubleshooting-guide.md).
 
 ## Network requirements
 
@@ -83,7 +85,6 @@ The Resource Processor needs to access the following resources outside the Azure
 | --- | --- |
 | AzureActiveDirectory | Authenticate with the User Assigned identity to access Azure Resource Manager and Azure Service Bus. |
 | AzureResourceManager | Access the Azure control plane to deploy and manage Azure resources. |
-| AzureMonitor | Publish traces and logs to one central place for troubleshooting. |
 | AzureContainerRegistry | Pull the Resource Processor container image, as it is located in Azure Container Registry.  |
 | Storage | The Porter bundles stores state between executions in an Azure Storage Account. |
 | AzureKeyVault | The Porter bundles might need to create an Azure Key Vault inside of the Workspace. To verify the creation, before a private link connection is created, Terraform needs to reach Key Vault over public network |
@@ -101,3 +102,13 @@ To install Docker, Porter and related packages ([script](/templates/core/terrafo
 * auth.docker.io
 * registry.terraform.io
 * releases.hashicorp.com
+
+## Challenges
+
+The notable challenges that needed to be solved included Porter automation, namely hosting environment, managing workspace (deployment) states and concurrency.
+
+<!-- markdownlint-disable MD013 -->
+Hosting the Porter runner in a container is an expected design idea and appealing due to its cost effectiveness among other things. However, that would create a nested Docker environment, "Docker in Docker". Although this is possible using [Azure CNAB Driver](https://github.com/deislabs/cnab-azure-driver), the solution is less reliable and troubleshooting becomes difficult; due to the environment's ephemeral nature, there is not much in addition to the [Application Insights](https://docs.microsoft.com/azure/azure-monitor/app/app-insights-overview) logs the developer can rely on. In contrast, the developer can always log in to the VM and see what's going on and run tests manually to reproduce bugs.
+
+Porter can keep tap on the installations, but Azure TRE needs a state record that is more tangible. It is instead the responsibility of the API to maintain the state of deployments in configuration store. The state is updated when a user deploys, modifies or deletes workspaces and based on the deployment status messages sent by Resource Processor. All possible states of a workspace or a workspace service are defined by the API in [`resource.py` file](https://github.com/microsoft/AzureTRE/blob/main/api_app/models/domain/resource.py).
+<!-- markdownlint-enable MD013 -->
