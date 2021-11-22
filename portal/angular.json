@@ -127,6 +127,204 @@
           }
         }
       }
+    },
+    "workspaceApp": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/workspace-app",
+      "sourceRoot": "projects/workspace-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/workspaceApp",
+            "index": "projects/workspace-app/src/index.html",
+            "main": "projects/workspace-app/src/main.ts",
+            "polyfills": "projects/workspace-app/src/polyfills.ts",
+            "tsConfig": "projects/workspace-app/tsconfig.app.json",
+            "assets": [
+              "projects/workspace-app/src/favicon.ico",
+              "projects/workspace-app/src/assets"
+            ],
+            "styles": [
+              "projects/workspace-app/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/workspace-app/src/environments/environment.ts",
+                  "with": "projects/workspace-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "workspaceApp:build:production"
+            },
+            "development": {
+              "browserTarget": "workspaceApp:build:development",
+              "proxyConfig": "src/proxy.conf.json"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "workspaceApp:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/workspace-app/src/test.ts",
+            "polyfills": "projects/workspace-app/src/polyfills.ts",
+            "tsConfig": "projects/workspace-app/tsconfig.spec.json",
+            "karmaConfig": "projects/workspace-app/karma.conf.js",
+            "assets": [
+              "projects/workspace-app/src/favicon.ico",
+              "projects/workspace-app/src/assets"
+            ],
+            "styles": [
+              "projects/workspace-app/src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    },
+    "coreApp": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/core-app",
+      "sourceRoot": "projects/core-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/coreApp",
+            "index": "projects/core-app/src/index.html",
+            "main": "projects/core-app/src/main.ts",
+            "polyfills": "projects/core-app/src/polyfills.ts",
+            "tsConfig": "projects/core-app/tsconfig.app.json",
+            "assets": [
+              "projects/core-app/src/favicon.ico",
+              "projects/core-app/src/assets"
+            ],
+            "styles": [
+              "projects/core-app/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/core-app/src/environments/environment.ts",
+                  "with": "projects/core-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "coreApp:build:production"
+            },
+            "development": {
+              "browserTarget": "coreApp:build:development",
+              "proxyConfig": "src/proxy.conf.json"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "coreApp:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/core-app/src/test.ts",
+            "polyfills": "projects/core-app/src/polyfills.ts",
+            "tsConfig": "projects/core-app/tsconfig.spec.json",
+            "karmaConfig": "projects/core-app/karma.conf.js",
+            "assets": [
+              "projects/core-app/src/favicon.ico",
+              "projects/core-app/src/assets"
+            ],
+            "styles": [
+              "projects/core-app/src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
     }
   },
   "defaultProject": "drePortal",

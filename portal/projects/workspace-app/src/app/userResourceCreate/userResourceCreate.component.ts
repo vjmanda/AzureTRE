@@ -3,53 +3,46 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import schemaAsset from '../../assets/test_schema.json';
-import { Template } from '../models/template';
-import { UserResourceCreateRequest } from '../models/userResourceCreateRequest';
-import { WorkspaceService } from '../models/workspaceService';
-import { resourceCreateComponent } from '../resourceCreate/resourceCreate.component';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { Template } from 'src/app/models/template';
+import { UserResourceCreateRequest } from 'src/app/models/userResourceCreateRequest';
+import { Workspace } from 'src/app/models/workspace';
+import { WorkspaceService } from 'src/app/models/workspaceService';
+import { ResourceCreateComponent } from 'src/app/resourceCreate/resourceCreate.component';
+import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
 
 @Component({
     selector: 'app-user-resource-create',
-    templateUrl: '../resourceCreate/resourceCreate.component.html',
-    styleUrls: ['../resourceCreate/resourceCreate.component.css'],
+    templateUrl: '../../../../../src/app/resourceCreate/resourceCreate.component.html',
+    styleUrls: ['../../../../../src/app/resourceCreate/resourceCreate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class UserResourceCreateComponent extends resourceCreateComponent {
+export class UserResourceCreateComponent extends ResourceCreateComponent {
 
     constructor(public dialogRef: MatDialogRef<UserResourceCreateComponent>,
         @Inject(MAT_DIALOG_DATA) public currentWorkspaceService: WorkspaceService,
-        public spinner: NgxSpinnerService, public dreApi: DREApiCoreService) {
-        super(spinner, dreApi);
+        public workspace: Workspace,
+        public spinner: NgxSpinnerService, public treApi: TREWorkspaceApiService) {
+        super(spinner);
     }
 
     schema: Observable<Template>;
 
 
-    templates$: Observable<Template[]> = this.dreApi.getUserResourceTemplates(this.currentWorkspaceService.templateName)
+    templates$: Observable<Template[]> = this.treApi.getUserResourceTemplates(this.currentWorkspaceService.templateName)
         .pipe(map(templates => templates));
 
 
     selectTemplate(template: Template) {
         this.template = template;
         console.log('Template selected' + this.template);
-        // this.schema = this.dreApi.getUserResourceTemplate(this.currentWorkspaceService.templateName, template.name);
-        let tmptemplate = new Template()
-        tmptemplate.properties = schemaAsset.properties;
-        this.schema = new Observable(observer => {
-            observer.next(tmptemplate)
-            observer.complete()
-        })
-
-
-        console.log("Schema:" + JSON.stringify(this.schema));
+        this.schema = this.treApi.getUserResourceTemplate(this.currentWorkspaceService.templateName, template.name);
         this.templateSelected = true;
+
     }
 
     createResource() {
-        this.spinner.show();
+
 
         if (this.formData == null) this.formData = {};
 
@@ -57,7 +50,7 @@ export class UserResourceCreateComponent extends resourceCreateComponent {
 
         if (this.ajv.errors) {
             console.log(this.ajv.errors);
-            this.spinner.hide();
+
             return;
         }
 
@@ -70,7 +63,7 @@ export class UserResourceCreateComponent extends resourceCreateComponent {
 
         console.log(this.currentWorkspaceService);
 
-        this.dreApi.createUserResource(this.currentWorkspaceService, req).subscribe(
+        this.treApi.createUserResource(this.currentWorkspaceService, req).subscribe(
             (result) => {
                 if (result.succeeded) {
                     console.log(`creatUserResource result: ${result.succeeded}`);
@@ -80,11 +73,11 @@ export class UserResourceCreateComponent extends resourceCreateComponent {
                     this.error = true;
                 }
 
-                this.spinner.hide();
+
             },
             (_) => {
                 this.error = true;
-                this.spinner.hide();
+
             }
         );
     }

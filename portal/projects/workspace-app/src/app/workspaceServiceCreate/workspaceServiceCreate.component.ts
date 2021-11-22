@@ -3,20 +3,20 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Template } from '../models/template';
-import { Workspace } from '../models/workspace';
-import { WorkspaceServiceCreateRequest } from '../models/workspaceServiceCreateRequest';
-import { resourceCreateComponent } from '../resourceCreate/resourceCreate.component';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { Template } from '../../../../../src/app/models/template';
+import { Workspace } from '../../../../../src/app/models/workspace';
+import { WorkspaceServiceCreateRequest } from '../../../../../src/app/models/workspaceServiceCreateRequest';
+import { ResourceCreateComponent } from '../../../../../src/app/resourceCreate/resourceCreate.component';
+import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
 
 @Component({
     selector: 'app-workspace-service-create',
-    templateUrl: '../resourceCreate/resourceCreate.component.html',
-    styleUrls: ['../resourceCreate/resourceCreate.component.css'],
+    templateUrl: '../../../../../src/app/resourceCreate/resourceCreate.component.html',
+    styleUrls: ['../../../../../src/app/resourceCreate/resourceCreate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class WorkspaceServiceCreateComponent extends resourceCreateComponent {
+export class WorkspaceServiceCreateComponent extends ResourceCreateComponent {
 
     schema: Observable<Template>;
     resourceType = "Workspace Service";
@@ -25,8 +25,8 @@ export class WorkspaceServiceCreateComponent extends resourceCreateComponent {
 
     constructor(public dialogRef: MatDialogRef<WorkspaceServiceCreateComponent>,
         @Inject(MAT_DIALOG_DATA) public currentWorkspace: Workspace,
-        public spinner: NgxSpinnerService, public dreApi: DREApiCoreService) {
-        super(spinner, dreApi);
+        public spinner: NgxSpinnerService, public dreApi: TREWorkspaceApiService) {
+        super(spinner);
     }
 
 
@@ -39,7 +39,7 @@ export class WorkspaceServiceCreateComponent extends resourceCreateComponent {
     }
 
     createResource() {
-        this.spinner.show();
+
 
         if (this.formData == null) this.formData = {};
 
@@ -47,7 +47,7 @@ export class WorkspaceServiceCreateComponent extends resourceCreateComponent {
 
         if (this.ajv.errors) {
             console.log(this.ajv.errors);
-            this.spinner.hide();
+
             return;
         }
 
@@ -70,11 +70,11 @@ export class WorkspaceServiceCreateComponent extends resourceCreateComponent {
                     this.error = true;
                 }
 
-                this.spinner.hide();
+
             },
             (_) => {
                 this.error = true;
-                this.spinner.hide();
+
             }
         );
     }

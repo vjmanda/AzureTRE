@@ -12,6 +12,7 @@ import { WorkspaceCreateRequest } from '../models/workspaceCreateRequest';
 import { WorkspaceDeleteRequestResponse } from '../models/workspaceDeleteResponse';
 import { WorkspaceService } from '../models/workspaceService';
 import { WorkspaceServiceCreateRequest } from '../models/workspaceServiceCreateRequest';
+import { UUID } from 'angular2-uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -36,16 +37,27 @@ export class DREApiCoreService {
   }
 
   getWorkspaces(): Observable<Workspace[]> {
+    console.log("getWorkspaces");
     const reqUri = `${this.configuration.api_uri}/workspaces`;
-
+    console.log(reqUri);
     return this.http.get(reqUri)
       .pipe(
         map(data => {
-          console.log('getWorksapces: ' + JSON.stringify(data));
+          console.log('getWorkspaces: ' + JSON.stringify(data));
           return data["workspaces"]
         }),
         catchError(this.handleError)
       );
+  }
+
+  getWorkspace(workspace_id: UUID): Observable<Workspace> {
+    const reqUri = `${this.configuration.api_uri}/workspaces/${workspace_id}`;
+
+    return this.http.get<Workspace>(reqUri)
+      .pipe(
+        tap(data => {
+          console.log('getWorkspace Response: ' + JSON.stringify(data));
+        }));
   }
 
   getWorkspaceTemplates(): Observable<Template[]> {

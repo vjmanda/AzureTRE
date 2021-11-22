@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { UserResource } from '../models/userResource';
-import { WorkspaceService } from '../models/workspaceService';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { Workspace } from 'src/app/models/workspace';
+import { UserResource } from '../../../../../src/app/models/userResource';
+import { WorkspaceService } from '../../../../../src/app/models/workspaceService';
+import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
+
 import { UserResourceCreateComponent } from '../userResourceCreate/userResourceCreate.component';
 
 @Component({
@@ -22,7 +24,7 @@ export class WorkspaceServiceComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private spinner: NgxSpinnerService,
-    private dreApi: DREApiCoreService,
+    private dreApi: TREWorkspaceApiService,
   ) { }
 
   public hasUserResourceTemplates = false;
@@ -41,9 +43,6 @@ export class WorkspaceServiceComponent implements OnInit {
         this.errorMessage = err;
       }
     });
-
-
-
   }
 
   openCreateUserResourceDialog() {

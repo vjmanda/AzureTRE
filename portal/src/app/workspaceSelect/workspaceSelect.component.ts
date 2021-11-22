@@ -35,16 +35,16 @@ export class WorkspaceSelectComponent implements OnInit {
 
   ngOnInit() {
 
-    this.spinner.show();
+
     this.dreApiCoreService.getWorkspaces().subscribe({
       next: workspaces => {
 
         this.workspaces = workspaces;
-        this.spinner.hide();
+
       },
       error: err => {
         this.errorMessage = err;
-        this.spinner.hide();
+
       }
     });
   }
@@ -52,7 +52,7 @@ export class WorkspaceSelectComponent implements OnInit {
 
   selectWorkspace(workspace: Workspace) {
     if (workspace.deployment.status != 'failed') {
-      this.workspaceSelected.emit(workspace);
+      window.location.href = '/workspaces/' + workspace.id + '/?app_id=' + workspace.properties.app_id;
     }
 
   }

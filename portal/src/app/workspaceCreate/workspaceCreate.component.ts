@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { WorkspaceCreateRequest } from 'src/app/models/workspaceCreateRequest';
 import { Template } from '../models/template';
-import { resourceCreateComponent } from '../resourceCreate/resourceCreate.component';
+import { ResourceCreateComponent } from '../resourceCreate/resourceCreate.component';
 import { DREApiCoreService } from '../services/dre-api-core.service';
 
 
@@ -15,7 +15,7 @@ import { DREApiCoreService } from '../services/dre-api-core.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class WorkspaceCreateComponent extends resourceCreateComponent {
+export class WorkspaceCreateComponent extends ResourceCreateComponent {
 
 
     schema: Observable<Template>;
@@ -24,7 +24,7 @@ export class WorkspaceCreateComponent extends resourceCreateComponent {
         .pipe(map(templates => templates));
 
     constructor(public spinner: NgxSpinnerService, public dreApi: DREApiCoreService) {
-        super(spinner, dreApi);
+        super(spinner);
     }
 
 
@@ -37,7 +37,7 @@ export class WorkspaceCreateComponent extends resourceCreateComponent {
     }
 
     createResource() {
-        this.spinner.show();
+
 
         if (this.formData == null) this.formData = {};
 
@@ -45,7 +45,7 @@ export class WorkspaceCreateComponent extends resourceCreateComponent {
 
         if (this.ajv.errors) {
             console.log(this.ajv.errors);
-            this.spinner.hide();
+
             return;
         }
 
@@ -66,11 +66,11 @@ export class WorkspaceCreateComponent extends resourceCreateComponent {
                     this.error = true;
                 }
 
-                this.spinner.hide();
+
             },
             (_) => {
                 this.error = true;
-                this.spinner.hide();
+
             }
         );
     }

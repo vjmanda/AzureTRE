@@ -7,12 +7,12 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { of, throwError } from 'rxjs';
 import { MockDREApiCoreService } from 'src/app/services/dre-api-core-service.mock';
 import { DREApiCoreService } from '../services/dre-api-core.service';
-import { resourceCreateComponent } from './resourceCreate.component';
+import { ResourceCreateComponent } from './resourceCreate.component';
 
 
-describe('resourceCreateComponent', () => {
-  let component: resourceCreateComponent;
-  let fixture: ComponentFixture<resourceCreateComponent>;
+describe('ResourceCreateComponent', () => {
+  let component: ResourceCreateComponent;
+  let fixture: ComponentFixture<ResourceCreateComponent>;
   let componentDreService: DREApiCoreService;
   const validEmail = 'me@myaddress.com';
 
@@ -22,13 +22,13 @@ describe('resourceCreateComponent', () => {
     TestBed.configureTestingModule({
       imports: [NgxSpinnerModule, FormsModule, ReactiveFormsModule,
         RouterTestingModule, HttpClientTestingModule, NoopAnimationsModule],
-      declarations: [resourceCreateComponent],
+      declarations: [ResourceCreateComponent],
       providers: [
         { provide: DREApiCoreService, useClass: MockDREApiCoreService }
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(resourceCreateComponent);
+    fixture = TestBed.createComponent(ResourceCreateComponent);
     component = fixture.componentInstance;
     componentDreService = fixture.debugElement.injector.get(DREApiCoreService);
 

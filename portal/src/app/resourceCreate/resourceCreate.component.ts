@@ -8,7 +8,7 @@ import { DREApiCoreService } from 'src/app/services/dre-api-core.service';
 import { Template } from '../models/template';
 
 @Injectable()
-export abstract class resourceCreateComponent implements OnInit {
+export abstract class ResourceCreateComponent implements OnInit {
 
   renderers = [
     ...angularMaterialRenderers
@@ -45,7 +45,7 @@ export abstract class resourceCreateComponent implements OnInit {
 
   formData: object;
 
-  constructor(public spinner: NgxSpinnerService, public dreApi: DREApiCoreService
+  constructor(public spinner: NgxSpinnerService //, public dreApi: DREApiCoreService
   ) { };
 
   ngOnInit() {

@@ -31,16 +31,18 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.spinner.show();
+    console.log('HomeComponent.ngOnInit');
+
+    console.log("here");
     this.dreApiCoreService.getWorkspaces().subscribe({
       next: workspaces => {
-
+        console.log('workspaces', workspaces);
         this.workspaces = workspaces;
-        this.spinner.hide();
+
       },
       error: err => {
         this.errorMessage = err;
-        this.spinner.hide();
+
       }
     });
   }
@@ -50,8 +52,11 @@ export class HomeComponent implements OnInit {
   }
 
   onWorkspaceSelected(workspace: Workspace) {
-    this.currentWorkspace = workspace;
+    // add go to workspace route
     console.log(this.currentWorkspace);
+
+    this.router.navigateByUrl('/workspaces/' + workspace.id + '/')
+    //this.currentWorkspace = workspace;
   }
 
   openCreateWorkspaceDialog() {

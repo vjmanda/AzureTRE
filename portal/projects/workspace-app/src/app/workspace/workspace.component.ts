@@ -1,11 +1,13 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Observable } from 'rxjs';
 import { Configuration } from 'src/app/models/configuration';
 import { Workspace } from 'src/app/models/workspace';
-import { WorkspaceService } from '../models/workspaceService';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { WorkspaceService } from '../../../../../src/app/models/workspaceService';
+import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
 import { WorkspaceServiceCreateComponent } from '../workspaceServiceCreate/workspaceServiceCreate.component';
 
 @Component({
@@ -17,37 +19,48 @@ export class WorkspaceComponent implements OnInit {
 
   public workspaceServices: Array<WorkspaceService>;
   private errorMessage: any;
-
-  @Input() workspace: Workspace;
+  public workspace: Workspace;
+  private workspace_id: string;
 
   public adminMode = false;
-
   public workspaceSelectVisible = false;
 
   constructor(
 
-    private router: Router,
+    private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
-    private dreApiCoreService: DREApiCoreService,
+    private dreApiCoreService: TREWorkspaceApiService,
     private configuration: Configuration,
     public dialog: MatDialog,
-  ) { }
+  ) {
+    this.workspace_id = this.route.snapshot.params.workspace_id;
+  }
 
 
   ngOnInit() {
+    console.log('workspace.component.ts: ngOnInit ' + this.workspace_id);
 
-    this.spinner.show();
-    this.dreApiCoreService.getWorkspaceServices(this.workspace).subscribe({
-      next: workspacesServices => {
 
-        this.workspaceServices = workspacesServices;
-        this.spinner.hide();
+    this.dreApiCoreService.getWorkspace(this.workspace_id).subscribe({
+      next: workspace => {
+        this.workspace = workspace['workspace'];
+        console.log(this.workspace);
+        this.dreApiCoreService.getWorkspaceServices(this.workspace).subscribe({
+          next: workspaceServices => {
+
+            console.log(this.workspace);
+            this.workspaceServices = workspaceServices;
+          },
+          error: err => {
+            this.errorMessage = err;
+          }
+        });
       },
       error: err => {
         this.errorMessage = err;
-        this.spinner.hide();
       }
-    });
+    }
+    );
   }
 
   openCreateWorkspaceServiceDialog() {

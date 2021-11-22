@@ -49,16 +49,16 @@ class AzureADAuthorization(AccessService):
             try:
                 app_reg_id = self._fetch_ws_app_reg_id_from_ws_id(request)
                 decoded_token = self._decode_token(token, app_reg_id)
-            except jwt.exceptions.InvalidSignatureError:
-                logging.debug("Failed to decode using workspace_id, try with TRE API app registration")
+            except Exception as e:
+                logging.debug("Failed to decode using workspace_id, try with TRE API app registration - " + str(e))
                 pass
 
         # Try TRE API app registration if appropriate
         if decoded_token is None and any(role in self.require_one_of_roles for role in self.TRE_CORE_ROLES):
             try:
                 decoded_token = self._decode_token(token, config.API_AUDIENCE)
-            except jwt.exceptions.InvalidSignatureError:
-                logging.debug("Failed to decode using TRE API app registration")
+            except Exception as e:
+                logging.debug("Failed to decode using TRE API app registration - " + str(e))
                 pass
 
         # Failed to decode token using either app registration

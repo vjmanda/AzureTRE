@@ -5,6 +5,7 @@ export class Workspace {
         workspace_id: string;
         display_name: string;
         description: string;
+        app_id: string;
     }
     deployment: {
         status: string;

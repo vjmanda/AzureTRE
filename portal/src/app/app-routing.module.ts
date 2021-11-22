@@ -1,30 +1,17 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterModule, Routes } from '@angular/router';
-import { MsalGuard } from '@azure/msal-angular';
-import { HomeComponent } from './home/home.component';
-import { NotFoundComponent } from './not-found.component';
-import { WorkspaceCreateComponent } from './workspaceCreate/workspaceCreate.component';
+import { ActivatedRouteSnapshot, Resolve, RouterModule, Routes } from '@angular/router';
+
+
 const externalUrlProvider = new InjectionToken('externalUrlRedirectResolver');
 
 const routes: Routes = [
   {
+    path: 'workspaces',
+    loadChildren: () => import('../../projects/workspace-app/src/app/app.module').then(m => m.WorkspaceAppModule)
+  },
+  {
     path: '',
-    component: HomeComponent,
-    canActivate: [MsalGuard]
-  },
-  {
-    path: 'home', redirectTo: ''
-  },
-  {
-    path: 'create-workspace',
-    canActivate: [MsalGuard],
-    component: WorkspaceCreateComponent
-
-  },
-  {
-    path: 'externalRedirect',
-    canActivate: [externalUrlProvider],
-    component: NotFoundComponent
+    loadChildren: () => import('../../projects/core-app/src/app/app.module').then(m => m.CoreAppModule)
   }
 ];
 

@@ -33,7 +33,7 @@
       </mat-card-header>
       <mat-card-content>
         <mat-chip-list>
-          <mat-chip>Running</mat-chip>
+          <mat-chip *ngIf="userResource.azureStatus.powerState">{{userResource.azureStatus.powerState}}</mat-chip>
           <mat-chip class="{{userResource.deployment.status}}" matTooltip="{{userResource.deployment.message}}"
             matTooltipPosition="below" matTooltipHideDelay="5000">{{userResource.deployment.status}}</mat-chip>
         </mat-chip-list>

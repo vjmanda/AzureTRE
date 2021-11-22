@@ -1,5 +1,5 @@
 <mat-toolbar>
-    <mat-toolbar-row>
+    <mat-toolbar-row *ngIf="workspace">
         <span>{{workspace.properties.display_name}}</span>
         <span class="example-spacer"></span>
 

@@ -10,7 +10,7 @@
                 <div style="display:flex; flex-direction: row;flex-wrap: wrap">
                     <mat-card *ngFor="let template of templates$ | async" (click)="selectTemplate(template)">
                         <mat-card-header>
-                            <mat-card-title> {{template.name}}</mat-card-title>
+                            <mat-card-title>{{template.title}}</mat-card-title>
                             <mat-card-subtitle>
                                 {{template.description}}
                             </mat-card-subtitle>

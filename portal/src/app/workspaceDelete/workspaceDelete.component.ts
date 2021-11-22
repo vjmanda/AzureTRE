@@ -49,12 +49,12 @@ export class WorkspaceDeleteComponent implements OnInit {
   }
 
   deleteWorkspace() {
-    this.spinner.show();
+
     this.submitted = true;
 
     if (this.workspaceForm.invalid) {
       this.error = true;
-      this.spinner.hide();
+
       return;
     }
     this.dreApi.deleteWorkspace(this.workspaceName).subscribe(
@@ -66,11 +66,11 @@ export class WorkspaceDeleteComponent implements OnInit {
         this.error = true;
       }
 
-      this.spinner.hide();
+
     },
     _ => {
       this.error = true;
-      this.spinner.hide();
+
     }
     );
   }
