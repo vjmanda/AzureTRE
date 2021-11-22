@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Workspace } from 'src/app/models/workspace';
-import { UserResource } from '../../../../../src/app/models/userResource';
-import { WorkspaceService } from '../../../../../src/app/models/workspaceService';
+import { UserResource } from '../../../models/userResource';
+import { WorkspaceService } from '../../../models/workspaceService';
 import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
 
 import { UserResourceCreateComponent } from '../userResourceCreate/userResourceCreate.component';

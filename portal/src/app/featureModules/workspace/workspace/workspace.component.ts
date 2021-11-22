@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { Configuration } from 'src/app/models/configuration';
 import { Workspace } from 'src/app/models/workspace';
-import { WorkspaceService } from '../../../../../src/app/models/workspaceService';
+import { WorkspaceService } from '../../../models/workspaceService';
 import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
 import { WorkspaceServiceCreateComponent } from '../workspaceServiceCreate/workspaceServiceCreate.component';
 

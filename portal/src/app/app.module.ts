@@ -5,8 +5,6 @@ import { CUSTOM_ELEMENTS_SCHEMA, InjectionToken, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterOutlet } from '@angular/router';
-import { CoreAppModule } from 'projects/core-app/src/app/app.module';
-import { WorkspaceAppModule } from 'projects/workspace-app/src/app/app.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
@@ -26,7 +24,7 @@ import { NotFoundComponent } from './not-found.component';
   ],
   entryComponents: [
   ],
-  exports: [    RouterOutlet
+  exports: [RouterOutlet
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]

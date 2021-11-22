@@ -7,11 +7,11 @@ const externalUrlProvider = new InjectionToken('externalUrlRedirectResolver');
 const routes: Routes = [
   {
     path: 'workspaces',
-    loadChildren: () => import('../../projects/workspace-app/src/app/app.module').then(m => m.WorkspaceAppModule)
+    loadChildren: () => import('./featureModules/workspace/app.module').then(m => m.WorkspaceAppModule)
   },
   {
     path: '',
-    loadChildren: () => import('../../projects/core-app/src/app/app.module').then(m => m.CoreAppModule)
+    loadChildren: () => import('./featureModules/core/app.module').then(m => m.CoreAppModule)
   }
 ];
 

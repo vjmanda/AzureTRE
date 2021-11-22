@@ -3,42 +3,39 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Template } from 'src/app/models/template';
-import { UserResourceCreateRequest } from 'src/app/models/userResourceCreateRequest';
-import { Workspace } from 'src/app/models/workspace';
-import { WorkspaceService } from 'src/app/models/workspaceService';
-import { ResourceCreateComponent } from 'src/app/resourceCreate/resourceCreate.component';
+import { Template } from '../../../models/template';
+import { Workspace } from '../../../models/workspace';
+import { WorkspaceServiceCreateRequest } from '../../../models/workspaceServiceCreateRequest';
+import { ResourceCreateComponent } from '../../../resourceCreate/resourceCreate.component';
 import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
 
 @Component({
-    selector: 'app-user-resource-create',
-    templateUrl: '../../../../../src/app/resourceCreate/resourceCreate.component.html',
-    styleUrls: ['../../../../../src/app/resourceCreate/resourceCreate.component.css'],
+    selector: 'app-workspace-service-create',
+    templateUrl: '../../../resourceCreate/resourceCreate.component.html',
+    styleUrls: ['../../../resourceCreate/resourceCreate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class UserResourceCreateComponent extends ResourceCreateComponent {
-
-    constructor(public dialogRef: MatDialogRef<UserResourceCreateComponent>,
-        @Inject(MAT_DIALOG_DATA) public currentWorkspaceService: WorkspaceService,
-        public workspace: Workspace,
-        public spinner: NgxSpinnerService, public treApi: TREWorkspaceApiService) {
-        super(spinner);
-    }
+export class WorkspaceServiceCreateComponent extends ResourceCreateComponent {
 
     schema: Observable<Template>;
-
-
-    templates$: Observable<Template[]> = this.treApi.getUserResourceTemplates(this.currentWorkspaceService.templateName)
+    resourceType = "Workspace Service";
+    templates$: Observable<Template[]> = this.dreApi.getWorkspaceServiceTemplates()
         .pipe(map(templates => templates));
+
+    constructor(public dialogRef: MatDialogRef<WorkspaceServiceCreateComponent>,
+        @Inject(MAT_DIALOG_DATA) public currentWorkspace: Workspace,
+        public spinner: NgxSpinnerService, public dreApi: TREWorkspaceApiService) {
+        super(spinner);
+    }
 
 
     selectTemplate(template: Template) {
         this.template = template;
         console.log('Template selected' + this.template);
-        this.schema = this.treApi.getUserResourceTemplate(this.currentWorkspaceService.templateName, template.name);
+        this.schema = this.dreApi.getWorkspaceServiceTemplate(template.name);
+        console.log("Schema:" + JSON.stringify(this.schema));
         this.templateSelected = true;
-
     }
 
     createResource() {
@@ -55,18 +52,18 @@ export class UserResourceCreateComponent extends ResourceCreateComponent {
         }
 
         this.submitted = true;
-        const req: UserResourceCreateRequest = {
+        const req: WorkspaceServiceCreateRequest = {
             templateName: this.template.name,
             properties: this.formData
         };
         console.log(this.formData);
 
-        console.log(this.currentWorkspaceService);
+        console.log(this.currentWorkspace);
 
-        this.treApi.createUserResource(this.currentWorkspaceService, req).subscribe(
+        this.dreApi.createWorkspaceService(this.currentWorkspace, req).subscribe(
             (result) => {
                 if (result.succeeded) {
-                    console.log(`creatUserResource result: ${result.succeeded}`);
+                    console.log(`createWorkspaceService result: ${result.succeeded}`);
                     console.log(`message returned is: ${result.message}`);
                 } else {
                     console.log(`message returned is: ${result}`);
