@@ -34,6 +34,14 @@ build-api-image:
 	&& source <(grep = ./api_app/_version.py | sed 's/ *= */=/g') \
 	&& docker build -t "$${ACR_NAME}.azurecr.io/microsoft/azuretre/api:$${__version__}" ./api_app/
 
+build-portal-image:
+	echo -e "\n\e[34m»»» 🧩 \e[96mBuilding API Image\e[0m..." \
+	&& . ./devops/scripts/check_dependencies.sh \
+	&& . ./devops/scripts/load_env.sh ./devops/.env \
+	&& . ./devops/scripts/set_docker_sock_permission.sh \
+	&& source <(grep = ./portal/version.txt | sed 's/ *= */=/g') \
+	&& docker build -t "$${ACR_NAME}.azurecr.io/microsoft/azuretre/portal:$${__version__}" ./portal/
+
 build-resource-processor-vm-porter-image:
 	echo -e "\n\e[34m»»» 🧩 \e[96mBuilding Resource Processor Image\e[0m..." \
 	&& . ./devops/scripts/check_dependencies.sh \
@@ -76,6 +84,15 @@ push-api-image:
 	&& source <(grep = ./api_app/_version.py | sed 's/ *= */=/g') \
 	&& az acr login -n $${ACR_NAME} \
 	&& docker push "$${ACR_NAME}.azurecr.io/microsoft/azuretre/api:$${__version__}"
+
+push-portal-image:
+	echo -e "\n\e[34m»»» 🧩 \e[96mPushing API Image\e[0m..." \
+	&& . ./devops/scripts/check_dependencies.sh \
+	&& . ./devops/scripts/load_env.sh ./devops/.env \
+	&& . ./devops/scripts/set_docker_sock_permission.sh \
+	&& source <(grep = ./portal/version.txt | sed 's/ *= */=/g') \
+	&& az acr login -n $${ACR_NAME} \
+	&& docker push "$${ACR_NAME}.azurecr.io/microsoft/azuretre/portal:$${__version__}"
 
 push-gitea-image:
 	echo -e "\n\e[34m»»» 🧩 \e[96mPushing Gitea Image\e[0m..." \
