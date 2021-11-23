@@ -28,7 +28,7 @@ export class WorkspaceComponent implements OnInit {
   constructor(
 
     private route: ActivatedRoute,
-    private spinner: NgxSpinnerService,
+
     private dreApiCoreService: TREWorkspaceApiService,
     private configuration: Configuration,
     public dialog: MatDialog,

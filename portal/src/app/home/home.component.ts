@@ -6,8 +6,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Configuration } from 'src/app/models/configuration';
 import { Workspace } from 'src/app/models/workspace';
 import { DREApiCoreService } from '../services/dre-api-core.service';
-import { WorkspaceCreateComponent } from '../workspaceCreate/workspaceCreate.component';
-import { WorkspaceDeleteComponent } from '../workspaceDelete/workspaceDelete.component';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +20,6 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private spinner: NgxSpinnerService,
     private dreApiCoreService: DREApiCoreService,
     private configuration: Configuration,
     public dialog: MatDialog,
@@ -42,7 +39,6 @@ export class HomeComponent implements OnInit {
       },
       error: err => {
         this.errorMessage = err;
-
       }
     });
   }
@@ -52,31 +48,6 @@ export class HomeComponent implements OnInit {
   }
 
   onWorkspaceSelected(workspace: Workspace) {
-    // add go to workspace route
-    console.log(this.currentWorkspace);
-
     this.router.navigateByUrl('/workspaces/' + workspace.id + '/')
-    //this.currentWorkspace = workspace;
-  }
-
-  openCreateWorkspaceDialog() {
-    const dialogRef = this.dialog.open(WorkspaceCreateComponent, {
-      width: '1000px',
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-
-  openDeleteWorkspaceDialog(workspaceName) {
-    const dialogRef = this.dialog.open(WorkspaceDeleteComponent, {
-      data: {
-        workspaceName
-      },
-      width: '1000px',
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 }

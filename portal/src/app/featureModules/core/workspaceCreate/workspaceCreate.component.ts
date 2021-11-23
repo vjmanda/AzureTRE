@@ -3,15 +3,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { WorkspaceCreateRequest } from 'src/app/models/workspaceCreateRequest';
-import { Template } from '../models/template';
-import { ResourceCreateComponent } from '../resourceCreate/resourceCreate.component';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { Template } from '../../../models/template';
+import { ResourceCreateComponent } from '../../../resourceCreate/resourceCreate.component';
+import { DREApiCoreService } from '../../../services/dre-api-core.service';
 
 
 @Component({
     selector: 'app-workspace-create',
-    templateUrl: '../resourceCreate/resourceCreate.component.html',
-    styleUrls: ['../resourceCreate/resourceCreate.component.css'],
+    templateUrl: '../../../resourceCreate/resourceCreate.component.html',
+    styleUrls: ['../../../resourceCreate/resourceCreate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -65,8 +65,6 @@ export class WorkspaceCreateComponent extends ResourceCreateComponent {
                     console.log(`message returned is: ${result}`);
                     this.error = true;
                 }
-
-
             },
             (_) => {
                 this.error = true;

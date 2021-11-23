@@ -10,9 +10,9 @@ import { InteractionType, IPublicClientApplication, LogLevel, PublicClientApplic
 import { Configuration } from '../../../../src/app/models/configuration';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { WorkspaceCreateComponent } from '../../../../src/app/workspaceCreate/workspaceCreate.component';
-import { WorkspaceDeleteComponent } from '../../../../src/app/workspaceDelete/workspaceDelete.component';
-import { WorkspaceSelectComponent } from '../../../../src/app/workspaceSelect/workspaceSelect.component';
+import { WorkspaceCreateComponent } from './workspaceCreate/workspaceCreate.component';
+import { WorkspaceDeleteComponent } from './workspaceDelete/workspaceDelete.component';
+import { WorkspaceSelectComponent } from './workspaceSelect/workspaceSelect.component';
 import { HomeComponent } from 'src/app/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,7 +33,6 @@ import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { CommonModule } from '@angular/common';
-import { ResourceCreateComponent } from 'src/app/resourceCreate/resourceCreate.component';
 import { FailedComponent } from 'src/app/failed/failed.component';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {

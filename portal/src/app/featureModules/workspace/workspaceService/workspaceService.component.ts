@@ -23,7 +23,7 @@ export class WorkspaceServiceComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private spinner: NgxSpinnerService,
+
     private dreApi: TREWorkspaceApiService,
   ) { }
 

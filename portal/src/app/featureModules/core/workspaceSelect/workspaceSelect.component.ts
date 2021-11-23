@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Configuration } from 'src/app/models/configuration';
 import { Workspace } from 'src/app/models/workspace';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { DREApiCoreService } from '../../../services/dre-api-core.service';
 import { WorkspaceCreateComponent } from '../workspaceCreate/workspaceCreate.component';
 import { WorkspaceDeleteComponent } from '../workspaceDelete/workspaceDelete.component';
 
@@ -25,7 +25,7 @@ export class WorkspaceSelectComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private spinner: NgxSpinnerService,
+
     private dreApiCoreService: DREApiCoreService,
     private configuration: Configuration,
     public dialog: MatDialog,
@@ -76,5 +76,6 @@ export class WorkspaceSelectComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+
   }
 }

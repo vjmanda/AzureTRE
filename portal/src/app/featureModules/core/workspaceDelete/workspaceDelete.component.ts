@@ -28,7 +28,7 @@ export class WorkspaceDeleteComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private spinner: NgxSpinnerService,
+
     public formBuilder: FormBuilder,
     private dreApi: DREApiCoreService
   ) {}
