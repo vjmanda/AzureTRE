@@ -12,7 +12,7 @@ We will use the [Guacamole workspace service bundle](./tre-templates/workspace-s
 
     Copy the resulting JSON payload.
 
-1. Navigate to the Swagger UI at `https://<azure_tre_fqdn>/api/docs`. 
+1. Navigate to the Swagger UI at `https://<azure_tre_fqdn>/api/docs`.
 
 1. Log into the Swagger UI by clicking `Authorize`, then `Authorize` again. You will be redirected to the login page.
 
@@ -48,7 +48,7 @@ Click `Try it out` on the `POST` `/api/user-resource-templates` operation.
 
 Now that we have published and registered both workspace service and user resource bundles we can use the workspace API to create a workspace service in our workspace.
 
-1. Navigate to the Swagger UI at `https://<azure_tre_fqdn>/api/<workspace_id>/docs` . Where `<workspace_id>` is the workspace ID of the workspace created in the previous step.
+1. Navigate to the Swagger UI at `https://<azure_tre_fqdn>/api/workspaces/<workspace_id>/docs` . Where `<workspace_id>` is the workspace ID of the workspace created in the previous step.
 
 !!! info
     All routes are auth protected. Click the green **Authorize** button to receive a token for Swagger client.
@@ -62,14 +62,18 @@ Now that we have published and registered both workspace service and user resour
 
 1. Enter the workspace_id in the `workspace_id` field.
 
-1. Paste the following payload json into the `Request body` field, then click `Execute`. Review the server response.
+1. Paste the following payload json into the `Request body` field, update `<your_workspace_app_reg_client_id>`, then click `Execute`. Review the server response.
 
 ```json
 {
-  "templateName": "tre-service-guacamole",
+  "templateName":"tre-service-guacamole",
   "properties": {
-    "display_name": "Virtual Desktops",
-    "description": "Create virtual desktops for runnign research workloads"
+    "display_name":"Virtual Desktop",
+    "description":"Create virtual desktops for runnign research workloads",
+    "openid_client_id":"<your_workspace_app_reg_client_id>",
+    "is_exposed_externally":true,
+    "guac_disable_copy":true,
+    "guac_disable_paste":true
   }
 }
 ```
@@ -82,7 +86,7 @@ You can also follow the progress in Azure portal as various resources come up.
 
 Once the workspace service has been created, we can use the workspace API to create a user resource in our workspace.
 
-1. Navigate to the Swagger UI at `https://<azure_tre_fqdn>/api/<workspace_id>/docs` . Where `<workspace_id>` is the workspace ID of your workspace.
+1. Navigate to the Swagger UI at `https://<azure_tre_fqdn>/api/workspaces/<workspace_id>/docs` . Where `<workspace_id>` is the workspace ID of your workspace.
 
 1. Click `Try it out` on the `POST` `/api/workspaces/<workspace_id>/workspace-services/<service_id>/user_resources` operation. Where `<workspace_id>` and `<service_id>` are the workspace ID of your workspace and workspace service ID of your workspace service.
 
@@ -100,7 +104,6 @@ Once the workspace service has been created, we can use the workspace API to cre
 }
 ```
 
-The API will report the ``resourceId`` of the created user resource, which can be used to query deployment status by using ``/api/workspaces/<workspace_id>/workspace-service/<workspace_service_id>/user_resources/<resource_id>``. 
+The API will report the ``resourceId`` of the created user resource, which can be used to query deployment status by using ``/api/workspaces/<workspace_id>/workspace-service/<workspace_service_id>/user_resources/<resource_id>``.
 
 You can also follow the progress in Azure portal as various resources come up. Once deployment has completed you can connect to the user resource using the `connection_uri` property returned by the API.
-

@@ -29,9 +29,13 @@ Now that we have published and registered a base workspace bundle we can use the
 !!! info
     All routes are auth protected. Click the green **Authorize** button to receive a token for Swagger client.
 
-As explained in the [auth guide](../auth.md), every workspace has a corresponding app registration which can be created using the helper script `/scripts/workspace-app-reg.py`. Multiple workspaces can share an app registration.
+As explained in the [auth guide](../auth.md), every workspace has a corresponding app registration which can be created using the helper script `scripts/aad-app-reg.sh`. For example:
 
-Running the script will report app id of the generated app which needs to be used in the POST body below.
+```bash
+    ./scripts/aad-app-reg.sh -n 'Workspace One' -r https://mydre.region.cloudapp.azure.com/api/docs/oidc-redirect -w
+```
+
+Running the script will report `WORKSPACE_API_CLIENT_ID` for the generated app which needs to be used in the POST body below.
 
 Go to ``azure_tre_fqdn/docs`` and use POST /api/workspaces with the sample body to create a base workspace.
 
@@ -41,7 +45,7 @@ Go to ``azure_tre_fqdn/docs`` and use POST /api/workspaces with the sample body 
   "properties": {
     "display_name": "manual-from-swagger",
     "description": "workspace for team X",
-    "app_id": "app id created above"
+    "app_id": "workspace app id created above"
   }
 }
 ```
@@ -50,8 +54,7 @@ The API will report the ``workspace_id`` of the created workspace, which can be 
 
 You can also follow the progress in Azure portal as various resources come up.
 
-!!! info
-    To query the status using the API your user needs to have `TREResearcher` or `TREOwner` role assigned to the app.
+Workspace level operations can now be carried out using the workspace API, at `/api/workspaces/<workspace_id>/docs/`.
 
 ## Next steps
 

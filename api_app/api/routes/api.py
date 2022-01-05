@@ -2,7 +2,7 @@ from collections import defaultdict
 from typing import Any, DefaultDict, Dict, Optional
 
 from fastapi import APIRouter, Request, Depends
-from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.openapi.docs import get_swagger_ui_html, get_swagger_ui_oauth2_redirect_html
 from fastapi.openapi.utils import get_openapi
 
 from api.dependencies.database import get_repository
@@ -20,8 +20,6 @@ core_tags_metadata = [
 ]
 
 workspace_tags_metadata = [
-    {"name": "workspace service templates", "description": "**Workspace Owners and Researchers** can access templates"},
-    {"name": "user resource templates", "description": "**TRE users** can access templates"},
     {"name": "workspaces", "description": " **Workspace Owners and Researchers** can view their own workspaces"},
     {"name": "workspace services", "description": "**Workspace Owners** administer workspace services, **Workspace Owners and Researchers** can view services in the workspaces they belong to"},
     {"name": "user resources", "description": "**Researchers** administer and can view their own researchers, **Workspace Owners** can view/update/delete all user resources in their workspaces"},
@@ -34,11 +32,9 @@ core_router = APIRouter(prefix=config.API_PREFIX)
 core_router.include_router(health.router, tags=["health"])
 core_router.include_router(status.router, tags=["status"])
 core_router.include_router(workspace_templates.workspace_templates_admin_router, tags=["workspace templates"])
-core_router.include_router(workspace_service_templates.workspace_service_templates_shared_router, tags=["workspace service templates"])
-core_router.include_router(workspace_service_templates.workspace_service_templates_admin_router, tags=["workspace service templates"])
-core_router.include_router(workspace_service_templates.user_resource_templates_shared_router, tags=["user resource templates"])
-core_router.include_router(workspace_service_templates.user_resource_templates_admin_router, tags=["user resource templates"])
-core_router.include_router(workspaces.workspaces_admin_router, tags=["workspaces"])
+core_router.include_router(workspace_service_templates.workspace_service_templates_core_router, tags=["workspace service templates"])
+core_router.include_router(workspace_service_templates.user_resource_templates_core_router, tags=["user resource templates"])
+core_router.include_router(workspaces.workspaces_core_router, tags=["workspaces"])
 core_router.include_router(workspaces.workspaces_shared_router, tags=["workspaces"])
 
 core_swagger_router = APIRouter()
@@ -71,11 +67,16 @@ async def get_swagger(request: Request):
         init_oauth={
             "usePkceWithAuthorizationCodeGrant": True,
             "clientId": config.SWAGGER_UI_CLIENT_ID,
-            "scopes": ["openid", "offline_access", f"api://{config.API_CLIENT_ID}/Workspace.Read"]
+            "scopes": ["openid", "offline_access", f"api://{config.API_CLIENT_ID}/user_impersonation"]
         }
     )
 
     return swagger_ui_html
+
+
+@core_swagger_router.get('/docs/oauth2-redirect', include_in_schema=False)
+async def swagger_ui_redirect():
+    return get_swagger_ui_oauth2_redirect_html()
 
 core_router.include_router(core_swagger_router)
 router.include_router(core_router)
@@ -85,10 +86,6 @@ workspace_router = APIRouter(prefix=config.API_PREFIX)
 workspace_router.include_router(workspaces.workspaces_shared_router, tags=["workspaces"])
 workspace_router.include_router(workspaces.workspace_services_workspace_router, tags=["workspace services"])
 workspace_router.include_router(workspaces.user_resources_workspace_router, tags=["user resources"])
-workspace_router.include_router(workspace_service_templates.workspace_service_templates_shared_router, tags=["workspace service templates"])
-workspace_router.include_router(workspace_service_templates.workspace_service_templates_workspace_router, tags=["workspace service templates"])
-workspace_router.include_router(workspace_service_templates.user_resource_templates_shared_router, tags=["user resource templates"])
-workspace_router.include_router(workspace_service_templates.user_resource_templates_workspace_router, tags=["user resource templates"])
 
 workspace_swagger_router = APIRouter()
 
@@ -110,7 +107,7 @@ async def get_openapi_json(workspace_id: str, request: Request, workspace_repo=D
         workspace = workspace_repo.get_workspace_by_id(workspace_id)
         ws_app_reg_id = workspace.properties['app_id']
         workspace_scopes = {
-            f"api://{ws_app_reg_id}/Workspace.Read": "List and Get TRE Workspaces"
+            f"api://{ws_app_reg_id}/user_impersonation": "List and Get TRE Workspaces"
         }
         openapi_definitions[workspace_id]['components']['securitySchemes']['oauth2']['flows']['authorizationCode']['scopes'] = workspace_scopes
 
@@ -129,7 +126,7 @@ async def get_workspace_swagger(workspace_id, request: Request, workspace_repo=D
         init_oauth={
             "usePkceWithAuthorizationCodeGrant": True,
             "clientId": config.SWAGGER_UI_CLIENT_ID,
-            "scopes": ["openid", "offline_access", f"api://{ws_app_reg_id}/Workspace.Read"]
+            "scopes": ["openid", "offline_access", f"api://{ws_app_reg_id}/user_impersonation"]
         }
     )
 
