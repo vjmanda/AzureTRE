@@ -32,6 +32,7 @@ import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { CommonModule } from '@angular/common';
+import { ResourceCreateComponent } from 'src/app/resourceCreate/resourceCreate.component';
 
 const providers = [{
   provide: TREWorkspaceApiService, useClass: TREWorkspaceApiService
@@ -154,7 +155,7 @@ export function MSALGuardConfigFactory(config: Configuration): MsalGuardConfigur
     CommonModule,
     NgxSpinnerModule,
     JsonFormsModule,
-    JsonFormsAngularMaterialModule,
+    JsonFormsAngularMaterialModule
   ],
   exports: [
     MatDialogModule,

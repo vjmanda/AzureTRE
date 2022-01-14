@@ -60,3 +60,4 @@ export class WorkspaceServiceComponent implements OnInit {
     window.open(url, "_blank");
   }
 }
+

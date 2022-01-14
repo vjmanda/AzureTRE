@@ -2,9 +2,7 @@ import { Injectable, Input, OnInit, SimpleChanges } from '@angular/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { createAjv } from '@jsonforms/core';
 import { ErrorObject } from 'ajv';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
-import { DREApiCoreService } from 'src/app/services/dre-api-core.service';
 import { Template } from '../models/template';
 
 @Injectable()
@@ -45,8 +43,7 @@ export abstract class ResourceCreateComponent implements OnInit {
 
   formData: object;
 
-  constructor(public spinner: NgxSpinnerService //, public dreApi: DREApiCoreService
-  ) { };
+  constructor() { };
 
   ngOnInit() {
   }

@@ -29,7 +29,7 @@
             <div class="row" *ngIf="submitted">
                 <div class="col-lg-6 text-center">
                     <div class="alert alert-success" id="successAlert" role="alert" *ngIf="!error">
-                        Your project creation request was submitted, this may take a few minutes. Once it's
+                        Your {{ resourceType }} creation request was submitted, this may take a few minutes. Once it's
                         completed it will appear in your project list on the home page.
                     </div>
                     <div class="alert alert-danger" id="errorAlert" role="alert" *ngIf="error">

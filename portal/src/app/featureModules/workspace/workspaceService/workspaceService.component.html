@@ -10,7 +10,7 @@
     <button *ngIf="workspaceService.properties.connection_uri" mat-raised-button color="primary"
       (click)="openLink(workspaceService.properties.connection_uri)">Connect</button>
     <button *ngIf="hasUserResourceTemplates" mat-raised-button color="primary"
-      (click)="$event.stopPropagation();openCreateUserResourceDialog()">
+      (click)="openCreateUserResourceDialog()">
       <mat-icon>add</mat-icon>
       New
     </button>

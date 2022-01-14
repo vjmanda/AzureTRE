@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { WorkspaceCreateRequest } from 'src/app/models/workspaceCreateRequest';
@@ -23,8 +22,8 @@ export class WorkspaceCreateComponent extends ResourceCreateComponent {
     templates$: Observable<Template[]> = this.dreApi.getWorkspaceTemplates()
         .pipe(map(templates => templates));
 
-    constructor(public spinner: NgxSpinnerService, public dreApi: DREApiCoreService) {
-        super(spinner);
+    constructor( public dreApi: DREApiCoreService) {
+        super();
     }
 
 
