@@ -5,8 +5,8 @@ import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
 
-import { MockDREApiCoreService } from 'src/app/services/dre-api-core-service.mock';
-import { DREApiCoreService } from 'src/app/services/dre-api-core.service';
+import { MockTREApiService } from 'src/app/services/dre-api-core-service.mock';
+import { TREApiService } from 'src/app/services/tre-api.service';
 import { WorkspaceDeleteComponent } from './workspaceDelete.component';
 
 describe('WorkspaceDeleteComponent', () => {
@@ -16,7 +16,7 @@ describe('WorkspaceDeleteComponent', () => {
 
   let component: WorkspaceDeleteComponent;
   let fixture: ComponentFixture<WorkspaceDeleteComponent>;
-  let componentDreService: DREApiCoreService;
+  let componentDreService: TREApiService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -26,8 +26,8 @@ describe('WorkspaceDeleteComponent', () => {
         provide: MAT_DIALOG_DATA,
         useValue: data
       }, {
-        provide: DREApiCoreService,
-        useClass: MockDREApiCoreService
+        provide: TREApiService,
+        useClass: MockTREApiService
       }, {
         provide: FormBuilder
       }]
@@ -36,7 +36,7 @@ describe('WorkspaceDeleteComponent', () => {
 
     fixture = TestBed.createComponent(WorkspaceDeleteComponent);
     component = fixture.componentInstance;
-    componentDreService = fixture.debugElement.injector.get(DREApiCoreService);
+    componentDreService = fixture.debugElement.injector.get(TREApiService);
 
     fixture.whenStable();
     fixture.detectChanges();

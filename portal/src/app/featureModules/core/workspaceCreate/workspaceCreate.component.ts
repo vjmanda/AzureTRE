@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { WorkspaceCreateRequest } from 'src/app/models/workspaceCreateRequest';
 import { Template } from '../../../models/template';
 import { ResourceCreateComponent } from '../../../resourceCreate/resourceCreate.component';
-import { DREApiCoreService } from '../../../services/dre-api-core.service';
+import { TREApiService } from 'src/app/services/tre-api.service';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class WorkspaceCreateComponent extends ResourceCreateComponent {
     templates$: Observable<Template[]> = this.dreApi.getWorkspaceTemplates()
         .pipe(map(templates => templates));
 
-    constructor( public dreApi: DREApiCoreService) {
+    constructor( public dreApi: TREApiService) {
         super();
     }
 

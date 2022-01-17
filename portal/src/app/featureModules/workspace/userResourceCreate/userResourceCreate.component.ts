@@ -8,7 +8,7 @@ import { UserResourceCreateRequest } from 'src/app/models/userResourceCreateRequ
 import { Workspace } from 'src/app/models/workspace';
 import { WorkspaceService } from 'src/app/models/workspaceService';
 import { ResourceCreateComponent } from 'src/app/resourceCreate/resourceCreate.component';
-import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
+import { TREWorkspaceApiService } from '../services/old_tre-workspace-api.service';
 
 @Component({
   selector: 'app-user-resource-create',

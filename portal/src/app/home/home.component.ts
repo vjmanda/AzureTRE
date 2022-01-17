@@ -2,10 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Configuration } from 'src/app/models/configuration';
 import { Workspace } from 'src/app/models/workspace';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { TREApiService } from 'src/app/services/tre-api.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +19,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private dreApiCoreService: DREApiCoreService,
+    private treApiService: TREApiService,
     private configuration: Configuration,
     public dialog: MatDialog,
 
@@ -31,7 +30,7 @@ export class HomeComponent implements OnInit {
     console.log('HomeComponent.ngOnInit');
 
     console.log("here");
-    this.dreApiCoreService.getWorkspaces().subscribe({
+    this.treApiService.getWorkspaces().subscribe({
       next: workspaces => {
         console.log('workspaces', workspaces);
         this.workspaces = workspaces;

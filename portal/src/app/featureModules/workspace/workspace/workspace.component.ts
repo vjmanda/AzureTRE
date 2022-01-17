@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { Configuration } from 'src/app/models/configuration';
 import { Workspace } from 'src/app/models/workspace';
 import { WorkspaceService } from '../../../models/workspaceService';
-import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
+import { TREWorkspaceApiService } from '../services/old_tre-workspace-api.service';
 import { WorkspaceServiceCreateComponent } from '../workspaceServiceCreate/workspaceServiceCreate.component';
 
 @Component({
@@ -29,7 +29,7 @@ export class WorkspaceComponent implements OnInit {
 
     private route: ActivatedRoute,
 
-    private dreApiCoreService: TREWorkspaceApiService,
+    private treApiService: TREWorkspaceApiService,
     private configuration: Configuration,
     public dialog: MatDialog,
   ) {
@@ -41,11 +41,11 @@ export class WorkspaceComponent implements OnInit {
     console.log('workspace.component.ts: ngOnInit ' + this.workspace_id);
 
 
-    this.dreApiCoreService.getWorkspace(this.workspace_id).subscribe({
+    this.treApiService.getWorkspace(this.workspace_id).subscribe({
       next: workspace => {
         this.workspace = workspace['workspace'];
         console.log(this.workspace);
-        this.dreApiCoreService.getWorkspaceServices(this.workspace).subscribe({
+        this.treApiService.getWorkspaceServices(this.workspace).subscribe({
           next: workspaceServices => {
 
             console.log(this.workspace);

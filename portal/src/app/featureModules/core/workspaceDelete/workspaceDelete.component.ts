@@ -12,7 +12,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DREApiCoreService } from 'src/app/services/dre-api-core.service';
+import { TREApiService } from 'src/app/services/tre-api.service';
 import { nameValidator } from './nameValidator';
 
 @Component({
@@ -30,7 +30,7 @@ export class WorkspaceDeleteComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
 
     public formBuilder: FormBuilder,
-    private dreApi: DREApiCoreService
+    private dreApi: TREApiService
   ) {}
 
   public get form() {

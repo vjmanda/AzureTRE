@@ -17,7 +17,7 @@ import { UUID } from 'angular2-uuid';
 @Injectable({
   providedIn: 'root'
 })
-export class DREApiCoreService {
+export class TREApiService {
 
   constructor(private http: HttpClient, private configuration: Configuration) { }
 

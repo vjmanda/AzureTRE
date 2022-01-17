@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
-import { DREApiCoreService } from 'src/app/services/dre-api-core.service';
+import { TREApiService } from 'src/app/services/tre-api.service';
 import {
   MsalBroadcastService, MsalGuard, MsalGuardConfiguration, MsalInterceptor,
   MsalInterceptorConfiguration, MsalRedirectComponent, MsalService,
@@ -41,7 +41,7 @@ export function loggerCallback(logLevel: LogLevel, message: string) {
 
 const providers =   [
     {
-    provide: DREApiCoreService, useClass: DREApiCoreService
+    provide: TREApiService, useClass: TREApiService
   },
   {
     provide: MAT_DIALOG_DEFAULT_OPTIONS,

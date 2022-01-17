@@ -4,7 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Workspace } from 'src/app/models/workspace';
 import { UserResource } from '../../../models/userResource';
 import { WorkspaceService } from '../../../models/workspaceService';
-import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
+import { TREWorkspaceApiService } from '../services/old_tre-workspace-api.service';
 
 import { UserResourceCreateComponent } from '../userResourceCreate/userResourceCreate.component';
 

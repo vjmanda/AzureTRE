@@ -7,7 +7,7 @@ import { Template } from '../../../models/template';
 import { Workspace } from '../../../models/workspace';
 import { WorkspaceServiceCreateRequest } from '../../../models/workspaceServiceCreateRequest';
 import { ResourceCreateComponent } from '../../../resourceCreate/resourceCreate.component';
-import { TREWorkspaceApiService } from '../services/tre-workspace-api.service';
+import { TREWorkspaceApiService } from '../services/old_tre-workspace-api.service';
 
 @Component({
   selector: 'app-workspace-service-create',

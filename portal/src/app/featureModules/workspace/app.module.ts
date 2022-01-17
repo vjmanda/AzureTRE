@@ -7,7 +7,7 @@ import {
 } from "@azure/msal-angular";
 import { InteractionType, IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { Configuration } from 'src/app/models/configuration';
-import { TREWorkspaceApiService } from './services/tre-workspace-api.service';
+import { TREWorkspaceApiService } from './services/old_tre-workspace-api.service';
 import { UserResourceCreateComponent } from './userResourceCreate/userResourceCreate.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { WorkspaceServiceComponent } from './workspaceService/workspaceService.component';

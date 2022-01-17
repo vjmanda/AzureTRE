@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs/internal/observable/of';
-import { MockDREApiCoreService } from '../services/dre-api-core-service.mock';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { MockTREApiService } from '../services/dre-api-core-service.mock';
+import { TREApiService } from '../services/dre-api-core.service';
 import { WorkspaceComponent } from './workspace.component';
 
 
@@ -23,7 +23,7 @@ describe('WorkspaceComponent', () => {
             ],
             declarations: [WorkspaceComponent],
             providers: [
-                { provide: DREApiCoreService, useClass: MockDREApiCoreService }
+                { provide: TREApiService, useClass: MockTREApiService }
             ],
             schemas: [
                 CUSTOM_ELEMENTS_SCHEMA

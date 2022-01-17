@@ -5,32 +5,32 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { of, throwError } from 'rxjs';
-import { MockDREApiCoreService } from 'src/app/services/dre-api-core-service.mock';
-import { DREApiCoreService } from '../services/dre-api-core.service';
+import { MockTREApiService } from 'src/app/services/dre-api-core-service.mock';
+import { TREApiService } from 'src/app/services/tre-api.service';
 import { ResourceCreateComponent } from './resourceCreate.component';
 
 
 describe('ResourceCreateComponent', () => {
   let component: ResourceCreateComponent;
   let fixture: ComponentFixture<ResourceCreateComponent>;
-  let componentDreService: DREApiCoreService;
+  let componentDreService: TREApiService;
   const validEmail = 'me@myaddress.com';
 
   beforeEach(async(() => {
-    const spy = jasmine.createSpyObj('DREApiCoreService', ['createWorkspace']);
+    const spy = jasmine.createSpyObj('TREApiService', ['createWorkspace']);
 
     TestBed.configureTestingModule({
       imports: [NgxSpinnerModule, FormsModule, ReactiveFormsModule,
         RouterTestingModule, HttpClientTestingModule, NoopAnimationsModule],
       declarations: [ResourceCreateComponent],
       providers: [
-        { provide: DREApiCoreService, useClass: MockDREApiCoreService }
+        { provide: TREApiService, useClass: MockTREApiService }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ResourceCreateComponent);
     component = fixture.componentInstance;
-    componentDreService = fixture.debugElement.injector.get(DREApiCoreService);
+    componentDreService = fixture.debugElement.injector.get(TREApiService);
 
     fixture.whenStable();
     fixture.detectChanges();
