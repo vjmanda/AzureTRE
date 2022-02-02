@@ -36,10 +36,10 @@ jobs:
       || contains(github.event.pull_request.labels.*.name, 'safe to test')
     outputs:
       # TODO BEFORE MERGE: replace the "t" with "tre"
-      RUN_TRE_ID: ${{ github.ref == 'refs/heads/main' && secrets.TRE_ID || format('t{0}', steps.run-id.outputs.refid) }}
-      RUN_ACR_NAME: ${{ github.ref == 'refs/heads/main' && secrets.ACR_NAME || format('t{0}', steps.run-id.outputs.refid) }}
-      RUN_STATE_STORAGE_ACCOUNT_NAME: ${{ github.ref == 'refs/heads/main' && secrets.STATE_STORAGE_ACCOUNT_NAME || format('t{0}mgmt', steps.run-id.outputs.refid) }}
-      RUN_MGMT_RESOURCE_GROUP: ${{ github.ref == 'refs/heads/main' && secrets.STATE_STORAGE_ACCOUNT_NAME || format('rg-t{0}-mgmt', steps.run-id.outputs.refid) }}
+      RUN_TRE_ID: ${{ github.ref == 'refs/heads/main' && secrets.TRE_ID || format('tr{0}', steps.run-id.outputs.refid) }}
+      RUN_ACR_NAME: ${{ github.ref == 'refs/heads/main' && secrets.ACR_NAME || format('tr{0}', steps.run-id.outputs.refid) }}
+      RUN_STATE_STORAGE_ACCOUNT_NAME: ${{ github.ref == 'refs/heads/main' && secrets.STATE_STORAGE_ACCOUNT_NAME || format('tr{0}mgmt', steps.run-id.outputs.refid) }}
+      RUN_MGMT_RESOURCE_GROUP: ${{ github.ref == 'refs/heads/main' && secrets.STATE_STORAGE_ACCOUNT_NAME || format('rg-tr{0}-mgmt', steps.run-id.outputs.refid) }}
     steps:
       - id: run-id
         run: |
