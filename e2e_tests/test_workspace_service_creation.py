@@ -1,4 +1,5 @@
 import pytest
+import logging
 from httpx import AsyncClient
 from starlette import status
 
@@ -36,8 +37,9 @@ async def test_getting_templates(template_name, admin_token, verify) -> None:
 
 
 @pytest.mark.smoke
-@pytest.mark.timeout(3000)
+@pytest.mark.timeout(5000)
 async def test_create_guacamole_service_into_base_workspace(admin_token, workspace_owner_token, verify) -> None:
+    logger = logging.getLogger()
     payload = {
         "templateName": "tre-workspace-base",
         "properties": {
@@ -47,6 +49,8 @@ async def test_create_guacamole_service_into_base_workspace(admin_token, workspa
         }
     }
     workspace_id, install_status = await post_workspace_template(payload, workspace_owner_token, admin_token, verify)
+    
+    logger.info("workspace id {}, install status: {}", workspace_id, install_status)
 
     service_payload = {
         "templateName": "tre-service-guacamole",
@@ -58,8 +62,16 @@ async def test_create_guacamole_service_into_base_workspace(admin_token, workspa
     }
     workspace_service_id, install_service_status = await post_workspace_service_template(workspace_id, service_payload, workspace_owner_token, verify)
 
+    logger.info("workspace_service_id {}, install_service_status: {}", workspace_service_id, install_service_status)
+
     await ping_guacamole_workspace_service(workspace_id, workspace_service_id, workspace_owner_token, verify)
+
+    logger.info("pinged ping_guacamole_workspace_service - done")
 
     await disable_and_delete_workspace_service(workspace_id, workspace_service_id, install_service_status, workspace_owner_token, verify)
 
+    logger.info("disable_and_delete_workspace_service - done")
+
     await disable_and_delete_workspace(workspace_id, install_status, workspace_owner_token, admin_token, verify)
+
+    logger.info("disable_and_delete_workspace - done")
