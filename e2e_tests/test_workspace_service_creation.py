@@ -18,7 +18,6 @@ workspace_service_templates = [
     (strings.INNEREYE_SERVICE)
 ]
 
-
 @pytest.mark.smoke
 @pytest.mark.parametrize("template_name", workspace_service_templates)
 async def test_get_workspace_service_templates(template_name, admin_token, verify) -> None:
@@ -36,7 +35,7 @@ async def test_getting_templates(template_name, admin_token, verify) -> None:
         assert (response.status_code == status.HTTP_200_OK), f"GET Request for {template_name} failed"
 
 
-@pytest.mark.extended
+@pytest.mark.smoke
 @pytest.mark.timeout(3000)
 async def test_create_guacamole_service_into_base_workspace(admin_token, workspace_owner_token, verify) -> None:
     payload = {
