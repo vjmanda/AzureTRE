@@ -4,8 +4,8 @@ SHELL:=/bin/bash
 ROOTPATH:=$(shell pwd)
 
 IMAGE_NAME_PREFIX?="microsoft/azuretre"
-FULL_CONTAINER_REGISTRY_NAME?="${ACR_NAME}.azurecr.io"
-FULL_IMAGE_NAME_PREFIX:=`echo ${FULL_CONTAINER_REGISTRY_NAME}/${IMAGE_NAME_PREFIX} | tr A-Z a-z`
+FULL_CONTAINER_REGISTRY_NAME?="$${ACR_NAME}.azurecr.io"
+FULL_IMAGE_NAME_PREFIX:=`echo "${FULL_CONTAINER_REGISTRY_NAME}/${IMAGE_NAME_PREFIX}" | tr A-Z a-z`
 
 target_title = @echo -e "\n\e[34m»»» 🧩 \e[96m$(1)\e[0m..."
 
@@ -37,74 +37,62 @@ mgmt-destroy:
 	&& . ./devops/scripts/load_terraform_env.sh ./devops/.env \
 	&& cd ./devops/terraform && ./destroy.sh
 
+# A recipe for building images. Parameters:
+# 1. Image name suffix
+# 2. Version file path
+# 3. Docker file path
+# 4. Docoer context path
+# Example: $(call build_image,"api","./api_app/_version.py","api_app/Dockerfile","./api_app/")
+define build_image
+$(call target_title, "Building $(1) Image") \
+&& . ./devops/scripts/check_dependencies.sh \
+&& . ./devops/scripts/load_env.sh ./devops/.env \
+&& . ./devops/scripts/set_docker_sock_permission.sh \
+&& source <(grep = $(2) | sed 's/ *= */=/g') \
+&& az acr login -n $${ACR_NAME} \
+&& if [ ! -z "$${CACHE_ACR_NAME}" ]; then az acr login -n $${CACHE_ACR_NAME}; \
+	cache_source="--cache-from $${CACHE_ACR_NAME}.azurecr.io/$${image_name_suffix}:$${__version__}"; fi \
+&& docker build -t ${FULL_IMAGE_NAME_PREFIX}/$(1):$${__version__} --build-arg BUILDKIT_INLINE_CACHE=1 \
+	--cache-from ${FULL_IMAGE_NAME_PREFIX}/$(1):$${__version__} $${cache_source} -f $(3) $(4)
+endef
+
 build-api-image:
-	$(call target_title, "Building API Image") \
-	&& . ./devops/scripts/check_dependencies.sh \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& . ./devops/scripts/set_docker_sock_permission.sh \
-	&& source <(grep = ./api_app/_version.py | sed 's/ *= */=/g') \
-	&& docker build -t "${FULL_IMAGE_NAME_PREFIX}/api:$${__version__}" ./api_app/
+	$(call build_image,"api","api_app/_version.py","api_app/Dockerfile","api_app/")
 
 build-resource-processor-vm-porter-image:
-	$(call target_title, "Building Resource Processor Image") \
-	&& . ./devops/scripts/check_dependencies.sh \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& . ./devops/scripts/set_docker_sock_permission.sh \
-	&& source <(grep = ./resource_processor/version.txt | sed 's/ *= */=/g') \
-	&& docker build -t "${FULL_IMAGE_NAME_PREFIX}/resource-processor-vm-porter:$${__version__}" -f ./resource_processor/vmss_porter/Dockerfile ./resource_processor/
+	$(call build_image,"resource-processor-vm-porter","resource_processor/version.txt","resource_processor/vmss_porter/Dockerfile","resource_processor/")
 
 build-gitea-image:
-	$(call target_title, "Building Gitea Image") \
-	&& . ./devops/scripts/check_dependencies.sh \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& . ./devops/scripts/set_docker_sock_permission.sh \
-	&& source <(grep = ./templates/shared_services/gitea/version.txt | sed 's/ *= */=/g') \
-	&& docker build -t "${FULL_IMAGE_NAME_PREFIX}/gitea:$${__version__}" -f ./templates/shared_services/gitea/Dockerfile .
+	$(call build_image,"gitea","templates/shared_services/gitea/version.txt","templates/shared_services/gitea/Dockerfile","templates/shared_services/gitea/")
 
 build-guacamole-image:
-	$(call target_title, "Building Guacamole Image") \
-	&& . ./devops/scripts/check_dependencies.sh \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& . ./devops/scripts/set_docker_sock_permission.sh \
-	&& source <(grep = ./templates/workspace_services/guacamole/version.txt | sed 's/ *= */=/g') \
-	&& cd ./templates/workspace_services/guacamole/guacamole-server/ \
-	&& docker build -t "${FULL_IMAGE_NAME_PREFIX}/guac-server:$${__version__}" -f ./docker/Dockerfile .
+	$(call build_image,"guac-server","templates/workspace_services/guacamole/version.txt","templates/workspace_services/guacamole/guacamole-server/docker/Dockerfile","templates/workspace_services/guacamole/guacamole-server")
 
-push-resource-processor-vm-porter-image:
-	$(call target_title, "Pushing Resource Processor Image") \
-	&& . ./devops/scripts/check_dependencies.sh \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& . ./devops/scripts/set_docker_sock_permission.sh \
-	&& source <(grep = ./resource_processor/version.txt | sed 's/ *= */=/g') \
-	&& az acr login -n $${ACR_NAME} \
-	&& docker push "${FULL_IMAGE_NAME_PREFIX}/resource-processor-vm-porter:$${__version__}"
+# A recipe for pushing images. Parameters:
+# 1. Image name suffix
+# 2. Version file path
+# Example: $(call push_image,"api","./api_app/_version.py")
+define push_image
+$(call target_title, "Pushing $(1) Image") \
+&& . ./devops/scripts/check_dependencies.sh \
+&& . ./devops/scripts/load_env.sh ./devops/.env \
+&& . ./devops/scripts/set_docker_sock_permission.sh \
+&& source <(grep = $(2) | sed 's/ *= */=/g') \
+&& az acr login -n $${ACR_NAME} \
+&& docker push "${FULL_IMAGE_NAME_PREFIX}/$(1):$${__version__}"
+endef
 
 push-api-image:
-	$(call target_title, "Pushing API Image") \
-	&& . ./devops/scripts/check_dependencies.sh \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& . ./devops/scripts/set_docker_sock_permission.sh \
-	&& source <(grep = ./api_app/_version.py | sed 's/ *= */=/g') \
-	&& az acr login -n $${ACR_NAME} \
-	&& docker push "${FULL_IMAGE_NAME_PREFIX}/api:$${__version__}"
+	$(call push_image,"api","./api_app/_version.py")
+
+push-resource-processor-vm-porter-image:
+	$(call push_image,"resource-processor-vm-porter","./resource_processor/version.txt")
 
 push-gitea-image:
-	$(call target_title, "Pushing Gitea Image") \
-	&& . ./devops/scripts/check_dependencies.sh \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& . ./devops/scripts/set_docker_sock_permission.sh \
-	&& source <(grep = ./templates/shared_services/gitea/version.txt | sed 's/ *= */=/g') \
-	&& az acr login -n $${ACR_NAME} \
-	&& docker push "${FULL_IMAGE_NAME_PREFIX}/gitea:$${__version__}"
+	$(call push_image,"gitea","./templates/shared_services/gitea/version.txt")
 
 push-guacamole-image:
-	$(call target_title, "Pushing Guacamole Image") \
-	&& . ./devops/scripts/check_dependencies.sh \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& . ./devops/scripts/set_docker_sock_permission.sh \
-	&& source <(grep = ./templates/workspace_services/guacamole/version.txt | sed 's/ *= */=/g') \
-	&& az acr login -n $${ACR_NAME} \
-	&& docker push "${FULL_IMAGE_NAME_PREFIX}/guac-server:$${__version__}"
+	$(call push_image,"guac-server","./templates/workspace_services/guacamole/version.txt")
 
 tre-deploy:
 	$(call target_title, "Deploying TRE") \
@@ -143,6 +131,7 @@ tre-start:
 tre-destroy:
 	$(call target_title, "Destroying TRE") \
 	&& . ./devops/scripts/check_dependencies.sh nodocker \
+	&& . ./devops/scripts/load_env.sh ./templates/core/.env \
 	&& . ./devops/scripts/load_env.sh ./devops/.env \
 	&& . ./devops/scripts/load_terraform_env.sh ./devops/.env \
 	&& . ./devops/scripts/load_terraform_env.sh ./templates/core/.env \
@@ -205,7 +194,7 @@ porter-uninstall:
 	&& cd ${DIR} && porter uninstall -p ./parameters.json --cred ./azure.json --debug
 
 porter-custom-action:
-	$(call target_title, "Deploying ${DIR} with Porter") \
+	$(call target_title, "Performing:${ACTION} ${DIR} with Porter") \
 	&& . ./devops/scripts/check_dependencies.sh porter \
 	&& . ./devops/scripts/load_env.sh ./devops/.env \
 	&& . ./devops/scripts/load_env.sh ./templates/core/.env \
@@ -221,25 +210,12 @@ porter-publish:
 	&& porter publish --registry "$${ACR_NAME}.azurecr.io" --debug
 
 register-bundle:
-	$(call target_title, "Publishing ${DIR} bundle") \
+	$(call target_title, "Registering ${DIR} bundle with API") \
 	&& ./devops/scripts/check_dependencies.sh porter \
 	&& . ./devops/scripts/load_env.sh ./devops/.env \
+	&& az acr login --name $${ACR_NAME}	\
 	&& cd ${DIR} \
-	&& ${ROOTPATH}/devops/scripts/publish_register_bundle.sh --acr-name $${ACR_NAME} --bundle-type $${BUNDLE_TYPE} --current --insecure --tre_url $${TRE_URL} --access-token $${TOKEN}
-
-build-and-register-bundle: porter-build
-	$(call target_title, "Building and Publishing ${DIR} bundle") \
-	&& ./devops/scripts/check_dependencies.sh porter \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& cd ${DIR} \
-	&& ${ROOTPATH}/devops/scripts/build_and_register_bundle.sh --acr-name $${ACR_NAME} --bundle-type $${BUNDLE_TYPE} --current --insecure --tre_url $${TRE_URL}
-
-register-bundle-payload:
-	$(call target_title, "Publishing ${DIR} bundle") \
-	&& ./devops/scripts/check_dependencies.sh porter \
-	&& . ./devops/scripts/load_env.sh ./devops/.env \
-	&& cd ${DIR} \
-	&& ${ROOTPATH}/devops/scripts/publish_register_bundle.sh --acr-name $${ACR_NAME} --bundle-type ${BUNDLE_TYPE} --current
+	&& ${ROOTPATH}/devops/scripts/register_bundle_with_api.sh --acr-name $${ACR_NAME} --bundle-type $${BUNDLE_TYPE} --current --insecure --tre_url $${TRE_URL} --verify
 
 static-web-upload:
 	$(call target_title, "Uploading to static website") \
@@ -258,11 +234,3 @@ test-e2e:
 	export WORKSPACE_SCOPE="api://${TEST_WORKSPACE_APP_ID}/user_impersonation" && \
 	cd e2e_tests && \
 	python -m pytest -m smoke --verify $${IS_API_SECURED:-true} --junit-xml pytest_e2e.xml
-
-setup-local-debugging-api:
-	$(call target_title,"Setting up the ability to debug the API") \
-	&& . ./devops/scripts/check_dependencies.sh nodocker \
-	&& . ./devops/scripts/load_env.sh ./templates/core/.env \
-	&& pushd ./templates/core/terraform/ > /dev/null && . ./outputs.sh && popd > /dev/null \
-	&& . ./devops/scripts/load_env.sh ./templates/core/tre.env \
-	&& . ./devops/scripts/setup_local_api_debugging.sh

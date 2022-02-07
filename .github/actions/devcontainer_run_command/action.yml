@@ -97,6 +97,9 @@ inputs:
       description: "Indicates if the API endpoint has valid TLS certificate and if we validate it during E2E."
       required: false
       default: "true"
+    CACHE_ACR_NAME:
+      description: "An additional Container Registry used for caching core images."
+      required: false
 
 runs:
   using: composite
@@ -142,6 +145,8 @@ runs:
         TF_VAR_api_client_secret: "${{ inputs.TF_VAR_api_client_secret }}"
         TF_VAR_acr_name: ${{ inputs.ACR_NAME }}
         IS_API_SECURED: ${{ inputs.IS_API_SECURED }}
+        CACHE_ACR_NAME: ${{ inputs.CACHE_ACR_NAME }}
+        DOCKER_BUILDKIT: ${{ inputs.DOCKER_BUILDKIT }}
       run: |
         docker run --rm --mount \
           "type=bind,src=${{ github.workspace }},dst=/workspaces/tre" \
@@ -181,5 +186,7 @@ runs:
           -e TEST_WORKSPACE_APP_ID \
           -e IS_API_SECURED \
           -e TF_VAR_ci_git_ref="${{ github.ref }}" \
+          -e CACHE_ACR_NAME \
+          -e DOCKER_BUILDKIT \
           '${{ inputs.ACTIONS_ACR_NAME }}.azurecr.io/tredev:latest' \
         bash -c "${{ inputs.COMMAND }}"
